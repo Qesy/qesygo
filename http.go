@@ -4,8 +4,6 @@ import(
 	"net/http"
 	"io/ioutil"
 	"strings"	
-	//"fmt"
-	//"encoding/json"
 )
 
 func Get(url string, para map[string]string) (string, error) {

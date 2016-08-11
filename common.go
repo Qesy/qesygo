@@ -5,7 +5,11 @@ import(
 	"fmt"
 	"io/ioutil"
 	"encoding/json"
-	//"strings"
+    "log"
+	"strings"
+    "errors"
+    "net/http"
+    "time"
 )
 
 type RandWeiht struct {
@@ -78,4 +82,42 @@ func JsonDecode(str []byte, jsonArr interface{}) error {
 
 func Printf(robots string){
 	fmt.Printf("%s", robots)
+}
+
+func Fprintf(w http.ResponseWriter, str string){
+    fmt.Fprintf(w, str)
+}
+
+func Die(v interface{}){
+    log.Fatal(v)
+}
+
+func Implode(arr []string, sep string) string{
+    return strings.Join(arr, sep)
+}
+
+func Explode(str string, sep string)[]string{
+    return strings.Split(str, sep)
+}
+
+func Err(str string) error {
+    return errors.New(str)
+}
+
+func Println(str interface{}){
+    fmt.Println(str)
+}
+
+func Time(str string) int64 {
+    now := time.Now()
+    t := now.UnixNano()
+    switch str {
+        case "Millisecond":
+            t = now.UnixNano()/1000
+        case "Microsecond":
+            t = now.UnixNano()/1000000
+        case "Second":
+            t = now.UnixNano()/1000000000            
+    }
+    return t
 }

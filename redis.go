@@ -3,22 +3,21 @@ package QesyGo
 import(
 	"time"
 	"github.com/garyburd/redigo/redis"
-	//"fmt"
 
 )
 
 type CacheRedis struct{
 	Pool 		*redis.Pool // redis connection pool
-	conninfo 	string
-	key      		string
+	Conninfo 	string
+	Key      	string
 }
 
-func newPool() *redis.Pool {
-    return &redis.Pool{
+func (cr *CacheRedis)newPool() {
+    cr.Pool = &redis.Pool{
         MaxIdle: 30,
         IdleTimeout: 240 * time.Second,
         Dial: func () (redis.Conn, error) {
-            c, err := redis.Dial("tcp", "127.0.0.1:6379")
+            c, err := redis.Dial("tcp", cr.Conninfo)
             if err != nil {
                 return nil, err
             }
@@ -27,70 +26,69 @@ func newPool() *redis.Pool {
     }
 }
 
-var pool = newPool()
+//var pool = newPool()
+func (cr *CacheRedis) Connect() error{
+    cr.newPool()    
+    c := cr.Pool.Get()
+    defer c.Close()
+    return c.Err()
+}
 
-func RedisGet(key string) (string, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	str, err := redis.String(conn.Do("GET", key))
+
+func (cr *CacheRedis) do(commandName string, args ...interface{}) (reply interface{}, err error) {
+	c := cr.Pool.Get()
+	defer c.Close()
+	return c.Do(commandName, args...)
+}
+
+
+func (cr *CacheRedis) Get(key string) (string, error){        
+	str, err := redis.String(cr.do("GET", key))
 	return str, err
 }
 
-func RedisSet(key string, value string) error {
-	conn := pool.Get()
-    	defer conn.Close()
-	_, err := conn.Do("SET", key, value)
+func (cr *CacheRedis) Set(key string, value string) error {
+	_, err := cr.do("SET", key, value)
 	return err
 }
 
-func RedisDel(key string) error{
-	conn := pool.Get()
-    	defer conn.Close()
-	_, err := conn.Do("DEL", key)
+func (cr *CacheRedis) Del(key string) error{
+	_, err := cr.do("DEL", key)
 	return err
 }
  
-func RedisExists(key string) (bool, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	return redis.Bool(conn.Do("EXISTS", key))
+func (cr *CacheRedis) Exists(key string) (bool, error){
+	return redis.Bool(cr.do("EXISTS", key))
 }
 
-func RedisExpire(key string, second int) (bool, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	return redis.Bool(conn.Do("EXPIRE", key, second))
+func (cr *CacheRedis) Expire(key string, second int) (bool, error){
+	return redis.Bool(cr.do("EXPIRE", key, second))
 }
 
-func RedisKeys(key string) (interface{}, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	return conn.Do("KEYS", key)
+func (cr *CacheRedis) Keys(key string) (interface{}, error){
+	return cr.do("KEYS", key)
 }
 
-func RedisTtl(key string) (interface{}, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	return redis.Int(conn.Do("TTL", key))
+func (cr *CacheRedis) Ttl(key string) (interface{}, error){
+	return redis.Int(cr.do("TTL", key))
 }
 
-func RedisHMset(key string, arr interface{})(interface{}, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	return conn.Do("HMSET", redis.Args{}.Add(key).AddFlat(arr)...)
+func (cr *CacheRedis) HMset(key string, arr map[string]string)(interface{}, error){
+    return cr.do("HMSET", redis.Args{}.Add(key).AddFlat(arr)...)
 }
 
-func RedisHGet(key string, subKey string)(interface{}, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	return conn.Do("HGET", key, subKey)
+func (cr *CacheRedis) HGet(key string, subKey string)(interface{}, error){
+	return cr.do("HGET", key, subKey)
 }
 
-func RedisHGetAll(key string)(interface{}, error){
-	conn := pool.Get()
-    	defer conn.Close()
-	return conn.Do("HGETALL", key)
+func (cr *CacheRedis) HGetAll(key string)(map[string]string, error){
+	rsByte, err := cr.do("HGETALL", key)
+    if err != nil{
+        return nil, err
+    }
+    rs, err := redis.StringMap(rsByte, err)
+    if err != nil{
+        return nil, err
+    }
+    return rs, err
 }
-
-
-//-- 暂时还缺少zadd --
