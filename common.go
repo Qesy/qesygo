@@ -80,8 +80,8 @@ func JsonDecode(str []byte, jsonArr interface{}) error {
 
 }
 
-func Printf(robots string){
-	fmt.Printf("%s", robots)
+func Printf(format string, a ...interface{}){
+	fmt.Printf(format, a)
 }
 
 func Fprintf(w http.ResponseWriter, str string){
