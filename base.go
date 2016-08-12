@@ -1,6 +1,6 @@
 package QesyGo
 
-func getConf(fileName string) interface{} {
+func GetConf(fileName string) interface{} {
     str, err := ReadFile(fileName)
     if(err != nil){
         Die(err)
