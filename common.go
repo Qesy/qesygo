@@ -121,3 +121,15 @@ func Time(str string) int64 {
     }
     return t
 }
+
+//-- format : "2006-01-02 03:04:05 PM" --
+func Date(timestamp int64, format string) string {
+    tm := time.Unix(timestamp, 0)
+    return tm.Format(format)
+}
+
+//-- "01/02/2006", "02/08/2015" --
+func StrToTime(format string, input string) int64{
+    tm2, _ := time.Parse(format, input)
+    return tm2.Unix()
+}
