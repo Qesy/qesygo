@@ -122,7 +122,19 @@ func Time(str string) int64 {
     return t
 }
 
+
 //-- format : "2006-01-02 03:04:05 PM" --
+/*
+月份 1,01,Jan,January
+日　 2,02,_2
+时　 3,03,15,PM,pm,AM,am
+分　 4,04
+秒　 5,05
+年　 06,2006
+周几 Mon,Monday
+时区时差表示 -07,-0700,Z0700,Z07:00,-07:00,MST
+时区字母缩写 MST
+*/
 func Date(timestamp int64, format string) string {
     tm := time.Unix(timestamp, 0)
     return tm.Format(format)
