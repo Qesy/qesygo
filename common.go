@@ -1,41 +1,40 @@
 package QesyGo
 
-import(
-	"math/rand"
+import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
-	"encoding/json"
-    "log"
+	"log"
+	"math/rand"
+	"net/http"
 	"strings"
-    "errors"
-    "net/http"
-    "time"
+	"time"
 )
 
 type RandWeiht struct {
-    Name string
-    Weight int
+	Name   string
+	Weight int
 }
 
 type RandWeihtArr []RandWeiht
 
-
-func Substr(str string, start int, end int) string { 
+func Substr(str string, start int, end int) string {
 	var endNum int
 	s := []byte(str)
-	if end > 0{
-		endNum = start+ end
-	}else{
+	if end > 0 {
+		endNum = start + end
+	} else {
 		endNum = len(str) + end
 	}
 	return string(s[start:endNum])
 }
 
-func Rate(num int) bool{
-	rand := rand.Intn(100)+1
-	if(rand <= num){
+func Rate(num int) bool {
+	rand := rand.Intn(100) + 1
+	if rand <= num {
 		return true
-	}else{
+	} else {
 		return false
 	}
 }
@@ -43,22 +42,22 @@ func Rate(num int) bool{
 /*
 * RandWeihtArr := &lib.RandWeihtArr{{"user1",8}, {"user2",1},{"user3",1}}
 * who := RandWeihtArr.RandWeight()
-*/
-func (arr *RandWeihtArr) RandWeight() string{
+ */
+func (arr *RandWeihtArr) RandWeight() string {
 	var all int
-	for _, v := range *arr{
+	for _, v := range *arr {
 		all += v.Weight
 	}
 	plusNum := 0
 	tempArr := make(map[string][2]int)
-	for _, v := range *arr{
+	for _, v := range *arr {
 		plusNum += v.Weight
-		tempArr[v.Name] = [2]int{plusNum-v.Weight, plusNum}
+		tempArr[v.Name] = [2]int{plusNum - v.Weight, plusNum}
 	}
-	randNum := rand.Intn(all)+1
+	randNum := rand.Intn(all) + 1
 	var ret string
-	for k, v := range tempArr{
-		if(randNum > v[0] && randNum <= v[1]){
+	for k, v := range tempArr {
+		if randNum > v[0] && randNum <= v[1] {
 			ret = k
 			break
 		}
@@ -66,7 +65,7 @@ func (arr *RandWeihtArr) RandWeight() string{
 	return ret
 }
 
-func ReadFile(str string) ([]byte, error){
+func ReadFile(str string) ([]byte, error) {
 	return ioutil.ReadFile(str)
 }
 
@@ -76,52 +75,51 @@ func JsonEncode(arr interface{}) ([]byte, error) {
 
 func JsonDecode(str []byte, jsonArr interface{}) error {
 	err := json.Unmarshal(str, jsonArr)
-    return err
+	return err
 
 }
 
-func Printf(format string, a ...interface{}){
+func Printf(format string, a ...interface{}) {
 	fmt.Printf(format, a)
 }
 
-func Fprintf(w http.ResponseWriter, str string){
-    fmt.Fprintf(w, str)
+func Fprintf(w http.ResponseWriter, str string) {
+	fmt.Fprintf(w, str)
 }
 
-func Die(v interface{}){
-    log.Fatal(v)
+func Die(v interface{}) {
+	log.Fatal(v)
 }
 
-func Implode(arr []string, sep string) string{
-    return strings.Join(arr, sep)
+func Implode(arr []string, sep string) string {
+	return strings.Join(arr, sep)
 }
 
-func Explode(str string, sep string)[]string{
-    return strings.Split(str, sep)
+func Explode(str string, sep string) []string {
+	return strings.Split(str, sep)
 }
 
 func Err(str string) error {
-    return errors.New(str)
+	return errors.New(str)
 }
 
-func Println(str interface{}){
-    fmt.Println(str)
+func Println(str ...interface{}) {
+	fmt.Println(str)
 }
 
 func Time(str string) int64 {
-    now := time.Now()
-    t := now.UnixNano()
-    switch str {
-        case "Millisecond":
-            t = now.UnixNano()/1000
-        case "Microsecond":
-            t = now.UnixNano()/1000000
-        case "Second":
-            t = now.UnixNano()/1000000000            
-    }
-    return t
+	now := time.Now()
+	t := now.UnixNano()
+	switch str {
+	case "Millisecond":
+		t = now.UnixNano() / 1000
+	case "Microsecond":
+		t = now.UnixNano() / 1000000
+	case "Second":
+		t = now.UnixNano() / 1000000000
+	}
+	return t
 }
-
 
 //-- format : "2006-01-02 03:04:05 PM" --
 /*
@@ -136,12 +134,12 @@ func Time(str string) int64 {
 时区字母缩写 MST
 */
 func Date(timestamp int64, format string) string {
-    tm := time.Unix(timestamp, 0)
-    return tm.Format(format)
+	tm := time.Unix(timestamp, 0)
+	return tm.Format(format)
 }
 
 //-- "01/02/2006", "02/08/2015" --
-func StrToTime(format string, input string) int64{
-    tm2, _ := time.Parse(format, input)
-    return tm2.Unix()
+func StrToTime(format string, input string) int64 {
+	tm2, _ := time.Parse(format, input)
+	return tm2.Unix()
 }

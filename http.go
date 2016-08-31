@@ -1,14 +1,14 @@
 package QesyGo
 
-import(
-	"net/http"
+import (
 	"io/ioutil"
-	"strings"	
+	"net/http"
+	"strings"
 )
 
 func Get(url string, para map[string]string) (string, error) {
 	paraStr := Http_build_query(para)
-	res, err := http.Get(url+"?"+paraStr)
+	res, err := http.Get(url + "?" + paraStr)
 	if err != nil {
 		return "", err
 	}
@@ -36,11 +36,11 @@ func Post(url string, para map[string]string) (string, error) {
 
 /*
 *  para := map[string]string{"sex":"boy", "age":"18", "name":"老钱"}
-*/
-func Http_build_query(para map[string]string) string{
+ */
+func Http_build_query(para map[string]string) string {
 	var arr []string
-	for key, val := range para{
-		arr = append(arr, key +"="+ val);
+	for key, val := range para {
+		arr = append(arr, key+"="+val)
 	}
 	return strings.Join(arr, "&")
 }
