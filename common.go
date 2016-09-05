@@ -176,3 +176,8 @@ func StrToTime(format string, input string) int64 {
 	tm2, _ := time.Parse(format, input)
 	return tm2.Unix()
 }
+
+func Int64ToInt(num int64) (int, error) {
+	str := strconv.FormatInt(num, 10)
+	return strconv.Atoi(str)
+}
