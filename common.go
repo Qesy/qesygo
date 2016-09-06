@@ -185,7 +185,7 @@ func Int64ToInt(num int64) (int, error) {
 func Unset(arr []string, str string) []string {
 	newArr := []string{}
 	for _, v := range arr {
-		if v != str {
+		if v != str && v != "" {
 			newArr = append(newArr, v)
 		}
 	}
