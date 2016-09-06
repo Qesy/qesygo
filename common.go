@@ -181,3 +181,7 @@ func Int64ToInt(num int64) (int, error) {
 	str := strconv.FormatInt(num, 10)
 	return strconv.Atoi(str)
 }
+
+func Unset(arr []string, num int) []string {
+	return append(arr[:num], arr[num+1:]...)
+}
