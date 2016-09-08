@@ -129,6 +129,9 @@ func Implode(arr []string, sep string) string {
 }
 
 func Explode(str string, sep string) []string {
+	if str == "" {
+		return []string{}
+	}
 	return strings.Split(str, sep)
 }
 
