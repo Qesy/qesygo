@@ -107,6 +107,10 @@ func JsonEncode(arr interface{}) ([]byte, error) {
 }
 
 func JsonDecode(str []byte, jsonArr interface{}) error {
+	strNew := string(str)
+	if strNew == "null" || strNew == "" {
+		return nil
+	}
 	err := json.Unmarshal(str, jsonArr)
 	return err
 
