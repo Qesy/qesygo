@@ -31,6 +31,11 @@ func Substr(str string, start int, end int) string {
 	return string(s[start:endNum])
 }
 
+func Rand(Min int, Max int) int {
+	tempNum := Max - Min
+	return Min + rand.Intn(tempNum)
+}
+
 func Rate(num int) bool {
 	rand := rand.Intn(100) + 1
 	if rand <= num {
