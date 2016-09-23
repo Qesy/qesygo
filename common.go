@@ -166,6 +166,17 @@ func Time(str string) int64 {
 	return t
 }
 
+func TimeStr(str string) string {
+	t := Time(str)
+	return strconv.FormatInt(t, 10)
+}
+
+func TimeInt(str string) int {
+	t := Time(str)
+	ret, _ := Int64ToInt(t)
+	return ret
+}
+
 //-- format : "2006-01-02 03:04:05 PM" --
 /*
 月份 1,01,Jan,January
