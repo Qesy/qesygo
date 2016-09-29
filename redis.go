@@ -49,7 +49,7 @@ func (cr *CacheRedis) Set(key string, value string) error {
 	return err
 }
 
-func (cr *CacheRedis) Del(key interface{}) error {
+func (cr *CacheRedis) Del(key string) error {
 	_, err := cr.do("DEL", key)
 	return err
 }
