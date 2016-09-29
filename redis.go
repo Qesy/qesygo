@@ -62,7 +62,7 @@ func (cr *CacheRedis) Expire(key string, second int) (bool, error) {
 	return redis.Bool(cr.do("EXPIRE", key, second))
 }
 
-func (cr *CacheRedis) Keys(key string) (interface{}, error) {
+func (cr *CacheRedis) Keys(key string) ([]string, error) {
 	return redis.Strings(cr.do("KEYS", key))
 }
 
