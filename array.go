@@ -50,3 +50,33 @@ func InArray(Arr interface{}, str string) bool {
 func Array_Rand(num int) []int {
 	return rand.Perm(num)
 }
+
+func Array_Diff(Arr1 []int, Arr2 []int) []int {
+	BigArr, SmallArr := Arr1, Arr2
+	if len(Arr2) > len(Arr1) {
+		BigArr = Arr2
+		SmallArr = Arr1
+	}
+	TempArr := []int{}
+	for _, v := range BigArr {
+		if !InArray(SmallArr, strconv.Itoa(v)) {
+			TempArr = append(TempArr, v)
+		}
+	}
+	return TempArr
+}
+
+func Array_Mixed(Arr1 []int, Arr2 []int) []int {
+	BigArr, SmallArr := Arr1, Arr2
+	if len(Arr2) > len(Arr1) {
+		BigArr = Arr2
+		SmallArr = Arr1
+	}
+	TempArr := []int{}
+	for _, v := range BigArr {
+		if InArray(SmallArr, strconv.Itoa(v)) {
+			TempArr = append(TempArr, v)
+		}
+	}
+	return TempArr
+}
