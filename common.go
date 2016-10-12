@@ -33,6 +33,7 @@ func Substr(str string, start int, end int) string {
 
 func Rand(Min int, Max int) int {
 	tempNum := Max - Min
+	rand.Seed(time.Now().UnixNano())
 	return Min + rand.Intn(tempNum)
 }
 
