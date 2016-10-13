@@ -15,6 +15,16 @@ func Array_merge(arr ...[]string) []string {
 	return retArr
 }
 
+func Array_merge_int(arr ...[]int) []int {
+	var retArr []int
+	for _, n := range arr {
+		for _, v := range n {
+			retArr = append(retArr, v)
+		}
+	}
+	return retArr
+}
+
 func InArray(Arr interface{}, str string) bool {
 	strArr, ok := Arr.([]string)
 	if ok {
