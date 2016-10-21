@@ -58,6 +58,7 @@ func InArray(Arr interface{}, str string) bool {
 }
 
 func Array_Rand(num int) []int {
+	rand.Seed(time.Now().UnixNano())
 	return rand.Perm(num)
 }
 
