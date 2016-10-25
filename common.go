@@ -35,18 +35,17 @@ func Substr(str string, start int, end int) string {
 
 func Rand(Min int, Max int) int {
 	tempNum := Max - Min
-	if randSeek > 9 {
+	if randSeek > 9999999999 {
 		randSeek = 0
 	} else {
 		randSeek++
 	}
-	Println(randSeek)
 	rand.Seed(time.Now().UnixNano() + randSeek)
 	return Min + rand.Intn(tempNum)
 }
 
 func Rate(num int) bool {
-	rand := rand.Intn(100) + 1
+	rand := Rand(1, 100)
 	if rand <= num {
 		return true
 	} else {
@@ -199,10 +198,10 @@ func Krand(size int, kind int) []byte {
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < size; i++ {
 		if is_all { // random ikind
-			ikind = rand.Intn(3)
+			ikind = Rand(1, 3)
 		}
 		scope, base := kinds[ikind][0], kinds[ikind][1]
-		result[i] = uint8(base + rand.Intn(scope))
+		result[i] = uint8(base + Rand(1, scope))
 	}
 	return result
 }
