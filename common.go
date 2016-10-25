@@ -35,7 +35,7 @@ func Substr(str string, start int, end int) string {
 
 func Rand(Min int, Max int) int {
 	tempNum := Max - Min
-	if randSeek > 9999999999 {
+	if randSeek > 9 {
 		randSeek = 0
 	} else {
 		randSeek++
