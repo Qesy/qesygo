@@ -70,7 +70,7 @@ func (cr *CacheRedis) Ttl(key string) (interface{}, error) {
 	return redis.Int(cr.do("TTL", key))
 }
 
-func (cr *CacheRedis) HMset(key string, arr map[string]string) (interface{}, error) {
+func (cr *CacheRedis) HMset(key string, arr interface{}) (interface{}, error) {
 	return cr.do("HMSET", redis.Args{}.Add(key).AddFlat(arr)...)
 }
 
