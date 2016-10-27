@@ -181,6 +181,11 @@ func Int64ToInt(num int64) (int, error) {
 	return strconv.Atoi(str)
 }
 
+func StrToInt(str string) int {
+	ret, _ := strconv.Atoi(str)
+	return ret
+}
+
 func Unset(arr []string, str string) []string {
 	newArr := []string{}
 	for _, v := range arr {
