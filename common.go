@@ -210,3 +210,18 @@ func Krand(size int, kind int) []byte {
 	}
 	return result
 }
+
+func Wordwrap(Str string, width int, breakStr string) string {
+	breakStrByte := []byte(breakStr)
+	strByte := []byte(Str)
+	var tempByte []byte
+	for k, v := range strByte {
+		if (k+1)%width == 0 {
+			tempByte = append(tempByte, v)
+			tempByte = append(tempByte, breakStrByte...)
+		} else {
+			tempByte = append(tempByte, v)
+		}
+	}
+	return string(tempByte)
+}
