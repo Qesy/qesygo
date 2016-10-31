@@ -216,7 +216,7 @@ func Wordwrap(Str string, width int, breakStr string) string {
 	strByte := []byte(Str)
 	var tempByte []byte
 	for k, v := range strByte {
-		if (k+1)%width == 0 {
+		if (k+1)%width == 0 && k != len(strByte)-1 {
 			tempByte = append(tempByte, v)
 			tempByte = append(tempByte, breakStrByte...)
 		} else {
