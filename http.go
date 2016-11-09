@@ -3,6 +3,7 @@ package QesyGo
 import (
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -40,7 +41,11 @@ func Post(url string, para map[string]string) (string, error) {
 func Http_build_query(para map[string]string) string {
 	var arr []string
 	for key, val := range para {
-		arr = append(arr, key+"="+val)
+		arr = append(arr, key+"="+UrlEnCode(val))
 	}
 	return strings.Join(arr, "&")
+}
+
+func UrlEnCode(str string) string {
+	return url.QueryEscape(str)
 }

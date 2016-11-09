@@ -1,6 +1,7 @@
 package QesyGo
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -224,4 +225,14 @@ func Wordwrap(Str string, width int, breakStr string) string {
 		}
 	}
 	return string(tempByte)
+}
+
+func Base64Encode(json string) string {
+	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
+	return b64.EncodeToString([]byte(json))
+}
+
+func Base64Decode(json string) ([]byte, error) {
+	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
+	return b64.DecodeString(json)
 }
