@@ -1,14 +1,17 @@
 package QesyGo
 
-/*func GetConf(fileName string) map[string]map[string]string {
-	str, err := ReadFile(fileName)
+import (
+	"log"
+	"os"
+)
+
+func Log(str string) {
+	FileName := Date(Time("Second"), "20060102")
+	logfile, err := os.OpenFile("log_"+FileName+".log", os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
-		Die(err)
+		os.Exit(-1)
 	}
-	confRs := map[string]map[string]string{}
-	err = JsonDecode(str, &confRs)
-	if err != nil {
-		Printf("config reload error: %s", err)
-	}
-	return confRs
-}*/
+	defer logfile.Close()
+	logger := log.New(logfile, "\r\n", log.Ldate|log.Ltime|log.Llongfile)
+	logger.Println(str)
+}
