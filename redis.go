@@ -40,9 +40,8 @@ func (cr *CacheRedis) do(commandName string, args ...interface{}) (reply interfa
 }
 
 func (cr *CacheRedis) FlushAll() error {
-	c := cr.Pool.Get()
-	defer c.Close()
-	return c.Flush()
+	_, err := cr.do("FLUSHALL")
+	return err
 }
 
 func (cr *CacheRedis) Get(key string) (string, error) {
