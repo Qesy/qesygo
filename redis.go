@@ -39,7 +39,7 @@ func (cr *CacheRedis) do(commandName string, args ...interface{}) (reply interfa
 	return c.Do(commandName, args...)
 }
 
-func (cr *CacheRedis) FlushAll(key string) error {
+func (cr *CacheRedis) FlushAll() error {
 	c := cr.Pool.Get()
 	defer c.Close()
 	return c.Flush()
