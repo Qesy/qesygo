@@ -39,6 +39,12 @@ func (cr *CacheRedis) do(commandName string, args ...interface{}) (reply interfa
 	return c.Do(commandName, args...)
 }
 
+func (cr *CacheRedis) FlushAll(key string) error {
+	c := cr.Pool.Get()
+	defer c.Close()
+	return c.Flush()
+}
+
 func (cr *CacheRedis) Get(key string) (string, error) {
 	str, err := redis.String(cr.do("GET", key))
 	return str, err
