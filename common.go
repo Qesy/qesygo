@@ -235,3 +235,8 @@ func Base64Decode(json string) ([]byte, error) {
 	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
 	return b64.DecodeString(json)
 }
+
+func Abs(a int) (ret int) {
+	ret = (a ^ a>>31) - a>>31
+	return
+}
