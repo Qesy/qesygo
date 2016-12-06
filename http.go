@@ -21,8 +21,11 @@ func Get(url string, para map[string]string) (string, error) {
 	return string(robots), err
 }
 
-func Post(url string, para map[string]string) (string, error) {
-	paraStr := Http_build_query(para)
+func Post(url string, paraInterface interface{}) (string, error) {
+	paraStr := ""
+	if para, ok := paraInterface.(map[string]string); ok {
+		paraStr = Http_build_query(para)
+	}
 	res, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(paraStr))
 	if err != nil {
 		return "", err
