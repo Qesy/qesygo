@@ -25,7 +25,10 @@ func Post(url string, paraInterface interface{}) (string, error) {
 	paraStr := ""
 	if para, ok := paraInterface.(map[string]string); ok {
 		paraStr = Http_build_query(para)
+	} else if para, ok := paraInterface.(string); ok {
+		paraStr = para
 	}
+
 	res, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(paraStr))
 	if err != nil {
 		return "", err
