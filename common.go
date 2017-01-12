@@ -1,7 +1,9 @@
 package QesyGo
 
 import (
+	"crypto/md5"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -242,4 +244,10 @@ func Base64Decode(json string) ([]byte, error) {
 func Abs(a int) (ret int) {
 	ret = (a ^ a>>31) - a>>31
 	return
+}
+
+func Md5(str string) string {
+	h := md5.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
 }
