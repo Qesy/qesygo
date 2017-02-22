@@ -177,9 +177,15 @@ func Date(timestamp int64, format string) string {
 }
 
 //-- "01/02/2006", "02/08/2015" --
-func StrToTime(format string, input string) int64 {
+func StrToTimeByDate(format string, input string) int64 {
 	tm2, _ := time.Parse(format, input)
 	return tm2.Unix()
+}
+
+func StrToTime(format string, input string) int64 {
+	loc, _ := time.LoadLocation("Local")
+	theTime, _ := time.ParseInLocation(format, input, loc)
+	return theTime.Unix()
 }
 
 func Int64ToInt(num int64) (int, error) {
