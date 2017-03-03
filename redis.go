@@ -1,7 +1,7 @@
 package QesyGo
 
 import (
-	"github.com/Qesy/QesyGo"
+	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"time"
 )
@@ -22,7 +22,7 @@ func (cr *CacheRedis) newPool() {
 				return nil, err
 			}
 			if _, err := c.Do("AUTH", cr.Auth); err != nil {
-				QesyGo.Println(err)
+				fmt.Println(err)
 				c.Close()
 				return nil, err
 			}
