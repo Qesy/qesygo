@@ -1,7 +1,6 @@
 package QesyGo
 
 import (
-	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"time"
 )
