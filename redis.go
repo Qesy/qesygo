@@ -20,10 +20,10 @@ func (cr *CacheRedis) newPool() {
 			if err != nil {
 				return nil, err
 			}
-			if _, err := c.Do("AUTH", cr.Auth); err != nil {
+			/*	if _, err := c.Do("AUTH", cr.Auth); err != nil {
 				c.Close()
 				return nil, err
-			}
+			}*/
 			return c, err
 		},
 	}
