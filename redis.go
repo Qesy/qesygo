@@ -21,11 +21,13 @@ func (cr *CacheRedis) newPool() {
 			if err != nil {
 				return nil, err
 			}
-			if _, err := c.Do("AUTH", cr.Auth); err != nil {
-				fmt.Println(err)
-				c.Close()
-				return nil, err
+			if cr.Auth != "" {
+				if _, err := c.Do("AUTH", cr.Auth); err != nil {
+					c.Close()
+					return nil, err
+				}
 			}
+
 			return c, err
 		},
 	}
