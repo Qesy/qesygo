@@ -8,7 +8,7 @@ import (
 type CacheRedis struct {
 	Pool     *redis.Pool // redis connection pool
 	Conninfo string
-	Key      string
+	Auth     string
 }
 
 func (cr *CacheRedis) newPool() {
@@ -18,6 +18,10 @@ func (cr *CacheRedis) newPool() {
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial("tcp", cr.Conninfo)
 			if err != nil {
+				return nil, err
+			}
+			if _, err := c.Do("AUTH", cr.Auth); err != nil {
+				c.Close()
 				return nil, err
 			}
 			return c, err
