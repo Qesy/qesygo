@@ -260,14 +260,14 @@ func Md5(str string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func int2bytes(x int32) []byte {
+func IntToBytes(x int32) []byte {
 	b_buf := bytes.NewBuffer([]byte{})
 	b_buf = bytes.NewBuffer([]byte{})
 	binary.Write(b_buf, binary.BigEndian, x)
 	return b_buf.Bytes()
 }
 
-func bytes2int(b []byte) int32 {
+func BytesToInt(b []byte) int32 {
 	var x int32
 	b_buf := bytes.NewBuffer(b)
 	binary.Read(b_buf, binary.BigEndian, &x)
