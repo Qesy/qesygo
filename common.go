@@ -266,7 +266,6 @@ func Md5(str string) string {
 
 func IntToBytes(x int32) []byte {
 	b_buf := bytes.NewBuffer([]byte{})
-	b_buf = bytes.NewBuffer([]byte{})
 	binary.Write(b_buf, binary.LittleEndian, x)
 	return b_buf.Bytes()
 }
