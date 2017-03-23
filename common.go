@@ -267,13 +267,13 @@ func Md5(str string) string {
 func IntToBytes(x int32) []byte {
 	b_buf := bytes.NewBuffer([]byte{})
 	b_buf = bytes.NewBuffer([]byte{})
-	binary.Write(b_buf, binary.BigEndian, x)
+	binary.Write(b_buf, binary.LittleEndian, x)
 	return b_buf.Bytes()
 }
 
 func BytesToInt(b []byte) int32 {
 	var x int32
 	b_buf := bytes.NewBuffer(b)
-	binary.Read(b_buf, binary.BigEndian, &x)
+	binary.Read(b_buf, binary.LittleEndian, &x)
 	return x
 }
