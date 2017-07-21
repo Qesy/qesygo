@@ -140,9 +140,9 @@ func Time(str string) int64 {
 	now := time.Now()
 	t := now.UnixNano()
 	switch str {
-	case "Millisecond":
-		t = now.UnixNano() / 1000
 	case "Microsecond":
+		t = now.UnixNano() / 1000
+	case "Millisecond":
 		t = now.UnixNano() / 1000000
 	case "Second":
 		t = now.UnixNano() / 1000000000
