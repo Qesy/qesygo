@@ -9,5 +9,13 @@ func Unmarshal(data []byte, pbStruct proto.Message) error {
 }
 
 func Marshal(ProtoId int32, pbStruct proto.Message) ([]byte, error) {
-	return proto.Marshal(pbStruct)
+	data := []byte{}
+	if msg, err := proto.Marshal(pbStruct); err != nil {
+		return msg, err
+	} else {
+		PidByte := IntToBytes(ProtoId)
+		data = append(data, PidByte...)
+		data = append(data, msg...)
+	}
+	return data, nil
 }
