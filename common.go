@@ -189,6 +189,10 @@ func Int64ToInt(num int64) (int, error) {
 	return strconv.Atoi(str)
 }
 
+func IntToStr(a interface{}) string {
+	return fmt.Sprintf("%d", a)
+}
+
 func StrToInt(str string) int {
 	ret, _ := strconv.Atoi(str)
 	return ret
