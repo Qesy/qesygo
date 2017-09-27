@@ -27,8 +27,7 @@ func Array_merge_int(arr ...[]int) []int {
 }
 
 func InArray(Arr interface{}, str string) bool {
-	strArr, ok := Arr.([]string)
-	if ok {
+	if strArr, ok := Arr.([]string); ok {
 		for _, v := range strArr {
 			if v == str {
 				return true
@@ -36,8 +35,7 @@ func InArray(Arr interface{}, str string) bool {
 		}
 		return false
 	}
-	mapArr, ok := Arr.(map[string]string)
-	if ok {
+	if mapArr, ok := Arr.(map[string]string); ok {
 		for _, v := range mapArr {
 			if v == str {
 				return true
@@ -45,10 +43,17 @@ func InArray(Arr interface{}, str string) bool {
 		}
 		return false
 	}
-	intArr, ok := Arr.([]int)
-	if ok {
+	if intArr, ok := Arr.([]int); ok {
 		for _, v := range intArr {
 			if strconv.Itoa(v) == str {
+				return true
+			}
+		}
+		return false
+	}
+	if intArr, ok := Arr.([]int32); ok {
+		for _, v := range intArr {
+			if IntToStr(v) == str {
 				return true
 			}
 		}
