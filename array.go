@@ -44,16 +44,18 @@ func InArray(Arr interface{}, str string) bool {
 		return false
 	}
 	if intArr, ok := Arr.([]int); ok {
+		strInt := StrToInt(str)
 		for _, v := range intArr {
-			if strconv.Itoa(v) == str {
+			if v == strInt {
 				return true
 			}
 		}
 		return false
 	}
 	if intArr, ok := Arr.([]int32); ok {
+		strInt32 := StrToInt32(str)
 		for _, v := range intArr {
-			if IntToStr(v) == str {
+			if v == strInt32 {
 				return true
 			}
 		}
