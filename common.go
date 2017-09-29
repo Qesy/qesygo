@@ -202,6 +202,10 @@ func StrToInt32(str string) int32 {
 	return int32(StrToInt(str))
 }
 
+func StrToInt64(str string) int64 {
+	return int64(StrToInt(str))
+}
+
 func Unset(arr []string, str string) []string {
 	newArr := []string{}
 	for _, v := range arr {
