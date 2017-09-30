@@ -279,13 +279,3 @@ func BytesToInt(b []byte) int32 {
 	binary.Read(b_buf, binary.LittleEndian, &x)
 	return x
 }
-
-func RandMap(Arr interface{}) interface{} {
-	ret := new(interface{})
-	if ArrMap, ok := Arr.(map[string]interface{}); ok && len(ArrMap) > 0 {
-		for _, v := range ArrMap {
-			return v
-		}
-	}
-	return ret
-}
