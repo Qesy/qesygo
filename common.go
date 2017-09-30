@@ -23,6 +23,8 @@ type RandWeiht struct {
 	Weight int
 }
 
+var RandSeekInt int64 = 1
+
 type RandWeihtArr []RandWeiht
 
 func Substr(str string, start int, end int) string {
@@ -41,7 +43,11 @@ func Rand(Min int, Max int) int {
 	if tempNum <= 0 {
 		return Min
 	}
-	randSeek := time.Now().UnixNano()
+	RandSeekInt++
+	if RandSeekInt > 999999999999999 {
+		RandSeekInt = 1
+	}
+	randSeek := time.Now().UnixNano() + RandSeekInt
 	rand.Seed(randSeek)
 	return Min + rand.Intn(tempNum)
 }
