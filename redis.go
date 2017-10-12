@@ -101,3 +101,43 @@ func (cr *CacheRedis) HGetAll(key string) (map[string]string, error) {
 	}
 	return rs, err
 }
+
+func (cr *CacheRedis) ZAdd(Key string, Score int64, Name string) (interface{}, error) {
+	return cr.do("ZADD", Key, Score, Name)
+}
+
+func (cr *CacheRedis) ZCard(Key string) (int, error) {
+	return redis.Int(cr.do("ZCARD", Key))
+}
+
+func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([]map[string]string, error) {
+	rank := []map[string]string{}
+	if rsByte, err := cr.do("ZRANGE", Key, Start, End, "WITHSCORES"); err == nil {
+		rsByteArr := rsByte.([]interface{})
+		for i := 0; i < len(rsByteArr)/2; i++ {
+			index := i * 2
+			key := string(rsByteArr[index].([]byte))
+			val := string(rsByteArr[index+1].([]byte))
+			rank = append(rank, map[string]string{key: val})
+		}
+		return rank, err
+	} else {
+		return rank, err
+	}
+}
+
+func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) (interface{}, error) {
+	rank := []map[string]string{}
+	if rsByte, err := cr.do("ZREVRANGE", Key, Start, End, "WITHSCORES"); err == nil {
+		rsByteArr := rsByte.([]interface{})
+		for i := 0; i < len(rsByteArr)/2; i++ {
+			index := i * 2
+			key := string(rsByteArr[index].([]byte))
+			val := string(rsByteArr[index+1].([]byte))
+			rank = append(rank, map[string]string{key: val})
+		}
+		return rank, err
+	} else {
+		return rank, err
+	}
+}
