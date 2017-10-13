@@ -102,7 +102,7 @@ func (cr *CacheRedis) HGetAll(key string) (map[string]string, error) {
 	return rs, err
 }
 
-func (cr *CacheRedis) ZAdd(Key string, Score int32, Name string) (interface{}, error) {
+func (cr *CacheRedis) ZAdd(Key string, Score int32, Name int32) (interface{}, error) {
 	return cr.do("ZADD", Key, Score, Name)
 }
 
@@ -110,23 +110,23 @@ func (cr *CacheRedis) ZCard(Key string) (int, error) {
 	return redis.Int(cr.do("ZCARD", Key))
 }
 
-func (cr *CacheRedis) ZRank(Key string, Name string) (int, error) {
+func (cr *CacheRedis) ZRank(Key string, Name int32) (int, error) {
 	return redis.Int(cr.do("ZRANK", Key, Name))
 }
 
-func (cr *CacheRedis) ZRevRank(Key string, Name string) (int, error) {
+func (cr *CacheRedis) ZRank(Key string, Name int32) (int, error) {
 	return redis.Int(cr.do("ZREVRANK", Key, Name))
 }
 
-func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([]map[string]string, error) {
-	rank := []map[string]string{}
+func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([][2]int32, error) {
+	rank := [][2]int32{}
 	if rsByte, err := cr.do("ZRANGE", Key, Start, End, "WITHSCORES"); err == nil {
 		rsByteArr := rsByte.([]interface{})
 		for i := 0; i < len(rsByteArr)/2; i++ {
 			index := i * 2
-			key := string(rsByteArr[index].([]byte))
-			val := string(rsByteArr[index+1].([]byte))
-			rank = append(rank, map[string]string{key: val})
+			key := StrToInt32(string(rsByteArr[index].([]byte)))
+			val := StrToInt32(string(rsByteArr[index+1].([]byte)))
+			rank = append(rank, [2]int32{key, val})
 		}
 		return rank, err
 	} else {
@@ -134,15 +134,15 @@ func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([]map[string]s
 	}
 }
 
-func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) (interface{}, error) {
-	rank := []map[string]string{}
+func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) ([][2]int32, error) {
+	rank := [][2]int32{}
 	if rsByte, err := cr.do("ZREVRANGE", Key, Start, End, "WITHSCORES"); err == nil {
 		rsByteArr := rsByte.([]interface{})
 		for i := 0; i < len(rsByteArr)/2; i++ {
 			index := i * 2
-			key := string(rsByteArr[index].([]byte))
-			val := string(rsByteArr[index+1].([]byte))
-			rank = append(rank, map[string]string{key: val})
+			key := StrToInt32(string(rsByteArr[index].([]byte)))
+			val := StrToInt32(string(rsByteArr[index+1].([]byte)))
+			rank = append(rank, [2]int32{key, val})
 		}
 		return rank, err
 	} else {
