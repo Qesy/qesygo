@@ -114,6 +114,10 @@ func (cr *CacheRedis) ZRank(Key string, Name string) (int, error) {
 	return redis.Int(cr.do("ZRANK", Key, Name))
 }
 
+func (cr *CacheRedis) ZRevRank(Key string, Name string) (int, error) {
+	return redis.Int(cr.do("ZREVRANK", Key, Name))
+}
+
 func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([]map[string]string, error) {
 	rank := []map[string]string{}
 	if rsByte, err := cr.do("ZRANGE", Key, Start, End, "WITHSCORES"); err == nil {
