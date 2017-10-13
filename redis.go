@@ -102,7 +102,7 @@ func (cr *CacheRedis) HGetAll(key string) (map[string]string, error) {
 	return rs, err
 }
 
-func (cr *CacheRedis) ZAdd(Key string, Score int64, Name string) (interface{}, error) {
+func (cr *CacheRedis) ZAdd(Key string, Score int32, Name string) (interface{}, error) {
 	return cr.do("ZADD", Key, Score, Name)
 }
 
