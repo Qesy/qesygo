@@ -114,7 +114,7 @@ func (cr *CacheRedis) ZRank(Key string, Name int32) (int, error) {
 	return redis.Int(cr.do("ZRANK", Key, Name))
 }
 
-func (cr *CacheRedis) ZRank(Key string, Name int32) (int, error) {
+func (cr *CacheRedis) ZRevRank(Key string, Name int32) (int, error) {
 	return redis.Int(cr.do("ZREVRANK", Key, Name))
 }
 
