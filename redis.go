@@ -118,15 +118,15 @@ func (cr *CacheRedis) ZRevRank(Key string, Name int32) (int, error) {
 	return redis.Int(cr.do("ZREVRANK", Key, Name))
 }
 
-func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([][2]int32, error) {
-	rank := [][2]int32{}
+func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([][2]int64, error) {
+	rank := [][2]int64{}
 	if rsByte, err := cr.do("ZRANGE", Key, Start, End, "WITHSCORES"); err == nil {
 		rsByteArr := rsByte.([]interface{})
 		for i := 0; i < len(rsByteArr)/2; i++ {
 			index := i * 2
-			key := StrToInt32(string(rsByteArr[index].([]byte)))
-			val := StrToInt32(string(rsByteArr[index+1].([]byte)))
-			rank = append(rank, [2]int32{key, val})
+			key := StrToInt64(string(rsByteArr[index].([]byte)))
+			val := StrToInt64(string(rsByteArr[index+1].([]byte)))
+			rank = append(rank, [2]int64{key, val})
 		}
 		return rank, err
 	} else {
@@ -134,15 +134,15 @@ func (cr *CacheRedis) ZRange(Key string, Start int32, End int32) ([][2]int32, er
 	}
 }
 
-func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) ([][2]int32, error) {
-	rank := [][2]int32{}
+func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) ([][2]int64, error) {
+	rank := [][2]int64{}
 	if rsByte, err := cr.do("ZREVRANGE", Key, Start, End, "WITHSCORES"); err == nil {
 		rsByteArr := rsByte.([]interface{})
 		for i := 0; i < len(rsByteArr)/2; i++ {
 			index := i * 2
-			key := StrToInt32(string(rsByteArr[index].([]byte)))
-			val := StrToInt32(string(rsByteArr[index+1].([]byte)))
-			rank = append(rank, [2]int32{key, val})
+			key := StrToInt64(string(rsByteArr[index].([]byte)))
+			val := StrToInt64(string(rsByteArr[index+1].([]byte)))
+			rank = append(rank, [2]int64{key, val})
 		}
 		return rank, err
 	} else {
