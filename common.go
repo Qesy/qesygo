@@ -173,6 +173,13 @@ func Date(timestamp int64, format string) string {
 	return tm.Format(format)
 }
 
+func DateTimeGet() int { //获取当天0点时间戳
+	t := time.Now()
+	timeStr := t.Format("2006-01-02")
+	t, _ = time.ParseInLocation("2006-01-02", timeStr, time.Now().Location())
+	return int(t.Unix())
+}
+
 //-- "01/02/2006", "02/08/2015" --
 func StrToTimeByDate(format string, input string) int64 {
 	tm2, _ := time.Parse(format, input)
