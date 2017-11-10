@@ -3,6 +3,7 @@ package QesyGo
 import (
 	"log"
 	"os"
+	"runtime/debug"
 )
 
 func Log(str string, logLev string) {
@@ -14,4 +15,5 @@ func Log(str string, logLev string) {
 	defer logfile.Close()
 	logger := log.New(logfile, "\r\n", log.Ldate|log.Ltime|log.Llongfile)
 	logger.Println(str)
+	debug.PrintStack()
 }
