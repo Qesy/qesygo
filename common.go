@@ -182,7 +182,7 @@ func DateTimeGet() int { //获取当天0点时间戳
 
 //-- "01/02/2006", "02/08/2015" --
 func StrToTimeByDate(format string, input string) int64 {
-	tm2, _ := time.Parse(format, input)
+	tm2, _ := time.ParseInLocation(format, input, time.Now().Location())
 	return tm2.Unix()
 }
 
