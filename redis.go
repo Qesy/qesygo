@@ -106,6 +106,10 @@ func (cr *CacheRedis) ZAdd(Key string, Score int64, Name int32) (interface{}, er
 	return cr.do("ZADD", Key, Score, Name)
 }
 
+func (cr *CacheRedis) ZRem(Key string, Name int32) (interface{}, error) {
+	return cr.do("zRem", Key, Name)
+}
+
 func (cr *CacheRedis) ZCard(Key string) (int, error) {
 	return redis.Int(cr.do("ZCARD", Key))
 }
