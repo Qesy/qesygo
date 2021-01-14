@@ -1,4 +1,4 @@
-package QesyGo
+package qesygo
 
 import (
 	"github.com/golang/protobuf/proto"

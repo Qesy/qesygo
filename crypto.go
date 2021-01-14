@@ -1,4 +1,4 @@
-package QesyGo
+package qesygo
 
 import (
 	"crypto"
