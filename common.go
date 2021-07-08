@@ -82,6 +82,15 @@ func (arr *RandWeihtArr) RandWeight() string {
 	return ret
 }
 
+func VeriPara(Req map[string]string, Para []string) bool {
+	for _, val := range Para {
+		if Str, ok := Req[val]; !ok || Str == "" {
+			return false
+		}
+	}
+	return true
+}
+
 func ReadFile(str string) ([]byte, error) {
 	return ioutil.ReadFile(str)
 }
