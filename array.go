@@ -114,3 +114,19 @@ func Array_Mixed(Arr1 []int, Arr2 []int) []int {
 	}
 	return TempArr
 }
+
+func Array_column(Arr []map[string]string, Str string) []string {
+	NewArr := []string{}
+	for _, v := range Arr {
+		NewArr = append(NewArr, v[Str])
+	}
+	return NewArr
+}
+
+func Array_column(Arr []map[string]string, Str string, Index string) []string {
+	NewArr := map[string]string{}
+	for _, v := range Arr {
+		NewArr[v[Index]] = v[Str]
+	}
+	return NewArr
+}
