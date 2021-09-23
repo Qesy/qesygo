@@ -123,10 +123,18 @@ func Array_column(Arr []map[string]string, Str string) []string {
 	return NewArr
 }
 
-func Array_column(Arr []map[string]string, Str string, Index string) []string {
+func Array_column_index(Arr []map[string]string, Str string, Index string) map[string]string {
 	NewArr := map[string]string{}
 	for _, v := range Arr {
 		NewArr[v[Index]] = v[Str]
 	}
 	return NewArr
+}
+
+func Keys(Arr map[string]string) []string {
+	Keys := []string{}
+	for k, _ := range Arr {
+		Keys = append(Keys, k)
+	}
+	return Keys
 }

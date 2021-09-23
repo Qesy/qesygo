@@ -85,6 +85,7 @@ func (arr *RandWeihtArr) RandWeight() string {
 func VeriPara(Req map[string]string, Para []string) bool {
 	for _, val := range Para {
 		if Str, ok := Req[val]; !ok || Str == "" {
+			fmt.Println("VeriPara", val)
 			return false
 		}
 	}
