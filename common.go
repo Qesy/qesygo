@@ -3,6 +3,7 @@ package qesygo
 import (
 	"bytes"
 	"crypto/md5"
+	"crypto/sha1"
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
@@ -283,6 +284,12 @@ func Md5(str string) string {
 	h := md5.New()
 	h.Write([]byte(str))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func SHA1(str string) string {
+	s := sha1.Sum([]byte(str))
+	strsha1 := hex.EncodeToString(s[:])
+	return strsha1
 }
 
 func IntToBytes(x int32) []byte {

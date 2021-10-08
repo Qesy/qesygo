@@ -8,6 +8,8 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+
+	"github.com/thinkoner/openssl"
 )
 
 // 加密
@@ -65,4 +67,24 @@ func PKCS7UnPadding(plantText []byte) []byte {
 	length := len(plantText)
 	unpadding := int(plantText[length-1])
 	return plantText[:(length - unpadding)]
+}
+
+func AesECBEncrypt(src, key []byte) []byte { //加密
+	dst, _ := openssl.AesECBEncrypt(src, key, openssl.PKCS7_PADDING)
+	return dst
+}
+
+func AesECBDecrypt(dst, key []byte) []byte { //解密
+	dst, _ = openssl.AesECBDecrypt(dst, key, openssl.PKCS7_PADDING)
+	return dst
+}
+
+func AesCBCEncrypt(src, key, iv []byte) []byte { //加密
+	dst, _ := openssl.AesCBCEncrypt(src, key, iv, openssl.PKCS7_PADDING)
+	return dst
+}
+
+func AesCBCDecrypt(dst, key, iv []byte) []byte { //解密
+	dst, _ = openssl.AesCBCDecrypt(dst, key, iv, openssl.PKCS7_PADDING)
+	return dst
 }
