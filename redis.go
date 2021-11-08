@@ -103,6 +103,26 @@ func (cr *CacheRedis) HGetAll(key string) (map[string]string, error) {
 	return rs, err
 }
 
+func (cr *CacheRedis) SAdd(Key string, Val string) (int, error) {
+	return redis.Int(cr.do("SADD", Key, Val))
+}
+
+func (cr *CacheRedis) SCard(Key string) (interface{}, error) { // 返回集合 key 的基数(集合中元素的数量)。
+	return redis.Int(cr.do("SCARD", Key))
+}
+
+func (cr *CacheRedis) SMembers(Key string, Val string) (interface{}, error) { //返回集合 key 中的所有成员
+	return redis.Strings(cr.do("SMEMBERS", Key, Val))
+}
+
+func (cr *CacheRedis) SIsMembers(Key string, Val string) (int, error) { //是否集合 key 的成员
+	return redis.Int(cr.do("SISMEMBER", Key, Val))
+}
+
+func (cr *CacheRedis) SRem(Key string, Val ...string) (interface{}, error) { //移除集合 key 中的一个或多个 member 元素
+	return redis.Int(cr.do("SREM", Key, Val))
+}
+
 func (cr *CacheRedis) ZAdd(Key string, Score int64, Name int32) (interface{}, error) {
 	return cr.do("ZADD", Key, Score, Name)
 }
