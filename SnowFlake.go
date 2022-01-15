@@ -1,3 +1,12 @@
+package qesygo
+
+import (
+	"errors"
+	"fmt"
+	"sync"
+	"time"
+)
+
 type SnowFlakeIdWorker struct {
 
 	// 开始时间戳
