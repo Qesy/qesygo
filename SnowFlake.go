@@ -57,7 +57,18 @@ type SnowFlakeIdWorker struct {
 	lock sync.Mutex
 }
 
-func (p *SnowFlakeIdWorker) init(dataCenterId int64, workerId int64) {
+func CreatId() int64 { //单机式
+	idWorker := SnowFlakeIdWorker{}
+	idWorker.Init(0, 1)
+	return idWorker.NextId()
+}
+
+func CreatIdMultiple(dataCenterId int64, workerId int64) int64 { //分布式
+	idWorker := SnowFlakeIdWorker{}
+	idWorker.Init(dataCenterId, workerId)
+	return idWorker.NextId()
+}
+func (p *SnowFlakeIdWorker) Init(dataCenterId int64, workerId int64) {
 	// 开始时间戳；这里是2021-06-01
 	p.twepoch = 1622476800000
 	// 机器ID所占的位数
@@ -95,7 +106,7 @@ func (p *SnowFlakeIdWorker) init(dataCenterId int64, workerId int64) {
 }
 
 // 生成ID，注意此方法已经通过加锁来保证线程安全
-func (p *SnowFlakeIdWorker) nextId() int64 {
+func (p *SnowFlakeIdWorker) NextId() int64 {
 	p.lock.Lock()
 	defer p.lock.Unlock()
 
