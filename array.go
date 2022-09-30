@@ -160,6 +160,16 @@ func Array_column_index(Arr []map[string]string, Str string, Index string) map[s
 	return NewArr
 }
 
+func Array_unique(Arr []string) []string {
+	NewArr := []string{}
+	for _, v := range Arr {
+		if !InArray(NewArr, v) {
+			NewArr = append(NewArr, v)
+		}
+	}
+	return NewArr
+}
+
 func Keys(Arr map[string]string) []string {
 	Keys := []string{}
 	for k, _ := range Arr {
