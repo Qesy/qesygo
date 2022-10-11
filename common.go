@@ -169,6 +169,8 @@ func TimeInt(str string) int {
 
 //-- format : "2006-01-02 03:04:05 PM" --
 /*
+@timestamp 传0 ，即现在时间
+
 月份 1,01,Jan,January
 日　 2,02,_2
 时　 3,03,15,PM,pm,AM,am
@@ -180,6 +182,9 @@ func TimeInt(str string) int {
 时区字母缩写 MST
 */
 func Date(timestamp int64, format string) string {
+	if timestamp == 0 {
+		timestamp = Time("Microsecond")
+	}
 	tm := time.Unix(timestamp, 0)
 	return tm.Format(format)
 }
