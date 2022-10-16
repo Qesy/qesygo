@@ -123,11 +123,11 @@ func (cr *CacheRedis) SRem(Key string, Val ...string) (interface{}, error) { //ç
 	return redis.Int(cr.do("SREM", Key, Val))
 }
 
-func (cr *CacheRedis) ZAdd(Key string, Score int64, Name int32) (interface{}, error) {
+func (cr *CacheRedis) ZAdd(Key string, Score int64, Name string) (interface{}, error) {
 	return cr.do("ZADD", Key, Score, Name)
 }
 
-func (cr *CacheRedis) ZRem(Key string, Name int32) (interface{}, error) {
+func (cr *CacheRedis) ZRem(Key string, Name string) (interface{}, error) {
 	return cr.do("zRem", Key, Name)
 }
 
@@ -135,11 +135,11 @@ func (cr *CacheRedis) ZCard(Key string) (int, error) {
 	return redis.Int(cr.do("ZCARD", Key))
 }
 
-func (cr *CacheRedis) ZRank(Key string, Name int32) (int, error) {
+func (cr *CacheRedis) ZRank(Key string, Name string) (int, error) {
 	return redis.Int(cr.do("ZRANK", Key, Name))
 }
 
-func (cr *CacheRedis) ZRevRank(Key string, Name int32) (int, error) {
+func (cr *CacheRedis) ZRevRank(Key string, Name string) (int, error) {
 	return redis.Int(cr.do("ZREVRANK", Key, Name))
 }
 
