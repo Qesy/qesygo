@@ -183,7 +183,7 @@ func TimeInt(str string) int {
 */
 func Date(timestamp int64, format string) string {
 	if timestamp == 0 {
-		timestamp = Time("Microsecond")
+		timestamp = Time("Second")
 	}
 	tm := time.Unix(timestamp, 0)
 	return tm.Format(format)
