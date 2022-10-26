@@ -83,6 +83,25 @@ func AesCBCDncrypt(encryptData, key, iv []byte) ([]byte, error) {
 	return encryptData, nil
 }
 
+// 微信小程序开放数据解密
+func AesDecrypt(crypted, key, iv []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockMode := cipher.NewCBCDecrypter(block, iv)
+	origData := make([]byte, len(crypted))
+	blockMode.CryptBlocks(origData, crypted)
+	//获取的数据尾端有'/x0e'占位符,去除它
+	for i, ch := range origData {
+		if ch == '\x0e' {
+			origData[i] = ' '
+		}
+	}
+	//{"phoneNumber":"15082726017","purePhoneNumber":"15082726017","countryCode":"86","watermark":{"timestamp":1539657521,"appid":"wx4c6c3ed14736228c"}}//<nil>
+	return origData, nil
+}
+
 func PKCS7UnPadding(plantText []byte) []byte {
 	length := len(plantText)
 	unpadding := int(plantText[length-1])
