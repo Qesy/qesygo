@@ -62,8 +62,12 @@ func (cr *CacheRedis) Set(key string, value string) error {
 	return err
 }
 
-func (cr *CacheRedis) Del(key string) error {
-	_, err := cr.do("DEL", key)
+func (cr *CacheRedis) Del(key ...string) error {
+	ArgsArr := redis.Args{}
+	for _, v := range key {
+		ArgsArr = append(ArgsArr, v)
+	}
+	_, err := cr.do("DEL", ArgsArr...)
 	return err
 }
 
