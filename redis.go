@@ -178,3 +178,7 @@ func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) ([][2]int64,
 		return rank, err
 	}
 }
+
+func (cr *CacheRedis) ZCount(Key string, Min string, Max string) (int, error) {
+	return redis.Int(cr.do("ZCOUNT ", Key, Min, Max))
+}
