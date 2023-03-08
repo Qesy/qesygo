@@ -121,6 +121,12 @@ func Fprintf(w http.ResponseWriter, str string) {
 	fmt.Fprintf(w, str)
 }
 
+func FailOnError(err error, msg string) {
+	if err != nil {
+		log.Panicf("%s: %s", msg, err)
+	}
+}
+
 func Die(v interface{}) {
 	log.Fatal(v)
 }
@@ -198,7 +204,7 @@ func DateTimeGet() int { //获取当天0点时间戳
 	return int(t.Unix())
 }
 
-//-- "01/02/2006", "02/08/2015" --
+// -- "01/02/2006", "02/08/2015" --
 func StrToTimeByDate(format string, input string) int64 {
 	tm2, _ := time.ParseInLocation(format, input, time.Now().Location())
 	return tm2.Unix()
@@ -254,7 +260,7 @@ func Unset(arr []string, str string) []string {
 	return newArr
 }
 
-//-- kind 0:纯数字，1：小写，2：大写，3：数字+大小写字幕 --
+// -- kind 0:纯数字，1：小写，2：大写，3：数字+大小写字幕 --
 func Krand(size int, kind int) []byte {
 	ikind, kinds, result := kind, [][]int{[]int{10, 48}, []int{26, 97}, []int{26, 65}}, make([]byte, size)
 	is_all := kind > 2 || kind < 0
