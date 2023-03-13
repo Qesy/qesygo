@@ -51,7 +51,7 @@ func Rand(Min int, Max int) int {
 }
 
 func Rate(num int) bool {
-	rand := Rand(1, 100)
+	rand := Rand(1, 101)
 	if rand <= num {
 		return true
 	} else {
