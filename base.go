@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-func Log(str string) {
-	FileName := "./static/log/log_" + Date(0, "20060102") + ".txt"
+func Log(str string, logLev string) {
+	FileName := "./static/log/" + logLev + "_" + Date(0, "20060102") + ".txt"
 	logfile, err := os.OpenFile(FileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return
