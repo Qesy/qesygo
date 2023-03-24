@@ -2,75 +2,150 @@ package qesygo
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 )
 
-// 0(1位，且始终为0)|时间戳(41位)|工作机器id(10位)|序列号(12位)
-type SNOW struct {
-	machineID     int64
-	snow          int64
-	lastTimeStamp int64
-	lock          sync.Mutex
+type SnowFlakeIdWorker struct {
+
+	// 开始时间戳
+	twepoch int64
+
+	// 机器ID所占的位数
+	workerIdBits int64
+
+	// 数据标识ID所占的位数
+	dataCenterIdBits int64
+
+	// 支持的最大机器ID
+	maxWorkerId int64
+
+	// 支持的最大机房 ID
+	maxDataCenterId int64
+
+	// 序列在ID中占的位数
+	sequenceBits int64
+
+	// 机器ID向左移位数
+	workerIdShift int64
+
+	// 机房ID向左移位数
+	dataCenterIdShift int64
+
+	// 时间截向左移位数
+	timestampLeftShift int64
+
+	// 生成序列的掩码最大值
+	sequenceMask int64
+
+	// 工作机器ID
+	workerId int64
+
+	// 机房ID
+	dataCenterId int64
+
+	/**
+	 * 毫秒内序列
+	 */
+	sequence int64
+
+	// 上次生成ID的时间戳
+	lastTimestamp int64
+
+	// 锁
+	lock sync.Mutex
 }
 
-func CreatId() int64 { //获取唯一ID号
-	snow, _ := newSnow(654)
-	time.Sleep(time.Microsecond)
-	return snow.getID()
+func CreatId() int64 { //单机式
+	idWorker := SnowFlakeIdWorker{}
+	idWorker.Init(0, 1)
+	time.Sleep(time.Millisecond)
+	return idWorker.NextId()
 }
 
-func (snow *SNOW) initTimeStamp() {
-	snow.lastTimeStamp = time.Now().UnixNano() / 1e6
+func CreatIdMultiple(dataCenterId int64, workerId int64) int64 { //分布式
+	idWorker := SnowFlakeIdWorker{}
+	idWorker.Init(dataCenterId, workerId)
+	return idWorker.NextId()
 }
+func (p *SnowFlakeIdWorker) Init(dataCenterId int64, workerId int64) {
+	// 开始时间戳；这里是2021-06-01
+	p.twepoch = 1622476800000
+	// 机器ID所占的位数
+	p.workerIdBits = 5
+	// 数据标识ID所占的位数
+	p.dataCenterIdBits = 5
+	// 支持的最大机器ID，最大是31
+	p.maxWorkerId = -1 ^ (-1 << p.workerIdBits)
+	// 支持的最大机房ID，最大是 31
+	p.maxDataCenterId = -1 ^ (-1 << p.dataCenterIdBits)
+	// 序列在ID中占的位数
+	p.sequenceBits = 12
+	// 机器ID向左移12位
+	p.workerIdShift = p.sequenceBits
+	// 机房ID向左移17位
+	p.dataCenterIdShift = p.sequenceBits + p.workerIdBits
+	// 时间截向左移22位
+	p.timestampLeftShift = p.sequenceBits + p.workerIdBits + p.dataCenterIdBits
+	// 生成序列的掩码最大值，最大为4095
+	p.sequenceMask = -1 ^ (-1 << p.sequenceBits)
 
-func newSnow(machineID int64) (*SNOW, error) {
-	snow := &SNOW{
-		machineID:     0,
-		snow:          0,
-		lastTimeStamp: time.Now().UnixNano() / 1e6,
-		lock:          sync.Mutex{},
+	if workerId > p.maxWorkerId || workerId < 0 {
+		panic(errors.New(fmt.Sprintf("Worker ID can't be greater than %d or less than 0", p.maxWorkerId)))
 	}
-	err := snow.setMachineID(machineID)
-	if err != nil {
-		return &SNOW{}, err
+	if dataCenterId > p.maxDataCenterId || dataCenterId < 0 {
+		panic(errors.New(fmt.Sprintf("DataCenter ID can't be greater than %d or less than 0", p.maxDataCenterId)))
 	}
-	return snow, err
+
+	p.workerId = workerId
+	p.dataCenterId = dataCenterId
+	// 毫秒内序列(0~4095)
+	p.sequence = 0
+	// 上次生成 ID 的时间戳
+	p.lastTimestamp = -1
 }
 
-func (snow *SNOW) setMachineID(id int64) error {
-	if id > 1024 {
-		return errors.New("Machine id must lower than 1024!")
+// 生成ID，注意此方法已经通过加锁来保证线程安全
+func (p *SnowFlakeIdWorker) NextId() int64 {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+
+	timestamp := p.timeGen()
+	// 如果当前时间小于上一次 ID 生成的时间戳，说明发生时钟回拨，为保证ID不重复抛出异常。
+	if timestamp < p.lastTimestamp {
+		panic(errors.New(fmt.Sprintf("Clock moved backwards. Refusing to generate id for %d milliseconds", p.lastTimestamp-timestamp)))
 	}
-	snow.machineID = id << 12 // 左移12位变成机器号
-	return nil
-}
 
-func (snow *SNOW) getID() int64 {
-	snow.lock.Lock()
-	defer snow.lock.Unlock()
-	return snow.snowID()
-}
-
-func (snow *SNOW) snowID() int64 {
-	curTimeStamp := time.Now().UnixNano() / 1e6
-	if curTimeStamp == snow.lastTimeStamp { // 请求id的时间发生冲突
-		// fmt.Println("current time is ", curTimeStamp, "last time is ", snow.lastTimeStamp, " cur snow is ", snow.snow)
-		snow.snow++ // 防止冲突直接加一
-		if snow.snow > 4095 {
-			time.Sleep(time.Nanosecond) // 无法加一的时候直接睡眠并置0，一定不会冲突，相当于同时修改snow以及时间戳
-			curTimeStamp = time.Now().UnixNano() / 1e6
-			snow.lastTimeStamp = curTimeStamp
-			snow.snow = 0
+	if p.lastTimestamp == timestamp {
+		// 同一时间生成的，则序号+1
+		p.sequence = (p.sequence + 1) & p.sequenceMask
+		// 毫秒内序列溢出：超过最大值
+		if p.sequence == 0 {
+			// 阻塞到下一个毫秒，获得新的时间戳
+			timestamp = p.tilNextMillis(p.lastTimestamp)
 		}
-		timeStampInSnmow := curTimeStamp & 0x1FFFFFFFFFF // 保留低41位的值
-		timeStampInSnmow <<= 22                          // 作为时间戳的41位时间值
-		return timeStampInSnmow | snow.machineID | snow.snow
 	} else {
-		snow.snow = 0
-		snow.lastTimeStamp = curTimeStamp
-		timeStampInSnmow := curTimeStamp & 0x1FFFFFFFFFF // 保留低41位的值
-		timeStampInSnmow <<= 22                          // 作为时间戳的41位时间值
-		return timeStampInSnmow | snow.machineID | snow.snow
+		// 时间戳改变，序列重置
+		p.sequence = 0
 	}
+	// 保存本次的时间戳
+	p.lastTimestamp = timestamp
+
+	// 移位并通过或运算拼到一起
+	return ((timestamp - p.twepoch) << p.timestampLeftShift) |
+		(p.dataCenterId << p.dataCenterIdShift) |
+		(p.workerId << p.workerIdShift) | p.sequence
+}
+
+func (p *SnowFlakeIdWorker) tilNextMillis(lastTimestamp int64) int64 {
+	timestamp := p.timeGen()
+	for timestamp <= lastTimestamp {
+		timestamp = p.timeGen()
+	}
+	return timestamp
+}
+
+func (p *SnowFlakeIdWorker) timeGen() int64 {
+	return time.Now().UnixNano() / 1e6
 }
