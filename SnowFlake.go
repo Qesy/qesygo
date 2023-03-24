@@ -16,6 +16,7 @@ type SNOW struct {
 
 func CreatId() int64 { //获取唯一ID号
 	snow, _ := newSnow(654)
+	time.Sleep(time.Microsecond)
 	return snow.getID()
 }
 
