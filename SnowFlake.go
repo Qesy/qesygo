@@ -46,8 +46,8 @@ func (snow *SNOW) setMachineID(id int64) error {
 }
 
 func (snow *SNOW) getID() int64 {
-	// snow.lock.Lock()
-	// defer snow.lock.Unlock()
+	snow.lock.Lock()
+	defer snow.lock.Unlock()
 	return snow.snowID()
 }
 
