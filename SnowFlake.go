@@ -14,7 +14,7 @@ type SNOW struct {
 	lock          sync.Mutex
 }
 
-func CreatId() int64 {
+func CreatId() int64 { //获取唯一ID号
 	snow, _ := newSnow(654)
 	return snow.getID()
 }
