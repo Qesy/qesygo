@@ -44,9 +44,6 @@ func Rand(Min int, Max int) int {
 	if tempNum <= 0 {
 		return Min
 	}
-	randSeek := time.Now().UnixNano()
-	fmt.Println("randSeek", randSeek)
-	rand.Seed(randSeek)
 	return Min + rand.Intn(tempNum)
 }
 
