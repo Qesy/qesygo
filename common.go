@@ -28,16 +28,6 @@ type RandWeiht struct {
 
 type RandWeihtArr []RandWeiht
 
-var WeekDayMap = map[string]int{
-	"Sunday":    0,
-	"Monday":    1,
-	"Tuesday":   2,
-	"Wednesday": 3,
-	"Thursday":  4,
-	"Friday":    5,
-	"Saturday":  6,
-}
-
 func Substr(str string, start int, end int) string {
 	var endNum int
 	s := []byte(str)
@@ -161,8 +151,8 @@ func Println(str ...interface{}) {
 }
 
 func Week() int { //获取周几 （1-7）
-	WeekStr := time.Now().Weekday().String()
-	return WeekDayMap[WeekStr]
+	t := time.Now()
+	return int(t.Weekday())
 }
 
 func Time(str string) int64 {
