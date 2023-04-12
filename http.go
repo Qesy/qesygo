@@ -52,6 +52,16 @@ func Http_build_query(para map[string]string) string {
 	return strings.Join(arr, "&")
 }
 
+func UnHttp_build_query(Str string) map[string]string { // 反Http_build_query
+	Arr := strings.Split(Str, "&")
+	Result := map[string]string{}
+	for _, v := range Arr {
+		Tmp := strings.Split(v, "=")
+		Result[Tmp[0]] = Tmp[1]
+	}
+	return Result
+}
+
 func UrlEnCode(str string) string {
 	return url.QueryEscape(str)
 }
