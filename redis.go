@@ -33,7 +33,7 @@ func (cr *CacheRedis) newPool() {
 	}
 }
 
-//var pool = newPool()
+// var pool = newPool()
 func (cr *CacheRedis) Connect() error {
 	cr.newPool()
 	c := cr.Pool.Get()
@@ -59,6 +59,11 @@ func (cr *CacheRedis) Get(key string) (string, error) {
 
 func (cr *CacheRedis) Set(key string, value string) error {
 	_, err := cr.do("SET", key, value)
+	return err
+}
+
+func (cr *CacheRedis) SetNx(key string, value string) error {
+	_, err := cr.do("SETNX", key, value)
 	return err
 }
 
