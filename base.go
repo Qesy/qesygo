@@ -7,8 +7,9 @@ import (
 	"os"
 )
 
-func Log() {
-	logFile, err := os.OpenFile("./static/log/error.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+func Log(Path string) {
+	// Path : "./static/log/error"
+	logFile, err := os.OpenFile(Path+".log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return
 	}
@@ -17,10 +18,10 @@ func Log() {
 	fmt.Println("Log Start Success !")
 }
 
-func LogSave() { // 保存日志
-	Src := "./static/log/error.log"
-	copy(Src, "./static/log/error_"+Date(0, "20060102")+".log")
-	os.WriteFile(Src, []byte{}, 0666)
+func LogSave(Path string) { // 保存日志
+	//Src := "./static/log/error.log"
+	copy(Path+".log", Path+"_"+Date(0, "20060102")+".log")
+	os.WriteFile(Path+".log", []byte{}, 0666)
 }
 
 func copy(src, dst string) (int64, error) {
