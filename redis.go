@@ -63,8 +63,7 @@ func (cr *CacheRedis) Set(key string, value string) error {
 }
 
 func (cr *CacheRedis) SetNx(key string, value string) error {
-	_, err := cr.do("SETNX", key, value)
-	return err
+	return cr.SetNx(key, value)
 }
 
 func (cr *CacheRedis) Del(key ...string) error {
