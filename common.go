@@ -16,7 +16,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/axgle/mahonia"
 )
@@ -145,77 +144,6 @@ func Err(str string) error {
 
 func Println(str ...interface{}) {
 	fmt.Println(str)
-}
-
-func Week() int { //获取周几 （1-7）
-	t := time.Now()
-	return int(t.Weekday())
-}
-
-func Time(str string) int64 {
-	now := time.Now()
-	t := now.UnixNano()
-	switch str {
-	case "Microsecond":
-		t = now.UnixNano() / 1000
-	case "Millisecond":
-		t = now.UnixNano() / 1000000
-	case "Second":
-		t = now.UnixNano() / 1000000000
-	}
-	return t
-}
-
-func TimeStr(str string) string {
-	t := Time(str)
-	return strconv.FormatInt(t, 10)
-}
-
-func TimeInt(str string) int {
-	t := Time(str)
-	ret, _ := Int64ToInt(t)
-	return ret
-}
-
-//-- format : "2006-01-02 03:04:05 PM" --
-/*
-@timestamp 传0 ，即现在时间
-
-月份 1,01,Jan,January
-日　 2,02,_2
-时　 3,03,15,PM,pm,AM,am
-分　 4,04
-秒　 5,05
-年　 06,2006
-周几 Mon,Monday
-时区时差表示 -07,-0700,Z0700,Z07:00,-07:00,MST
-时区字母缩写 MST
-*/
-func Date(timestamp int64, format string) string {
-	if timestamp == 0 {
-		timestamp = Time("Second")
-	}
-	tm := time.Unix(timestamp, 0)
-	return tm.Format(format)
-}
-
-func DateTimeGet() int { //获取当天0点时间戳
-	t := time.Now()
-	timeStr := t.Format("2006-01-02")
-	t, _ = time.ParseInLocation("2006-01-02", timeStr, time.Now().Location())
-	return int(t.Unix())
-}
-
-// -- "01/02/2006", "02/08/2015" --
-func StrToTimeByDate(format string, input string) int64 {
-	tm2, _ := time.ParseInLocation(format, input, time.Now().Location())
-	return tm2.Unix()
-}
-
-func StrToTime(format string, input string) int64 {
-	loc, _ := time.LoadLocation("Local")
-	theTime, _ := time.ParseInLocation(format, input, loc)
-	return theTime.Unix()
 }
 
 // 转码 ConvertToString( string, "gbk", "utf-8")
