@@ -19,8 +19,8 @@ func Log(Path string) {
 }
 
 func LogSave(Path string) { // 保存日志
-	//Src := "./static/log/error.log"
-	copy(Path+".log", Path+"_"+Date(0, "20060102")+".log")
+	Yestoday := DateTimeGet() - 86400
+	copy(Path+".log", Path+"_"+Date(Yestoday, "20060102")+".log")
 	os.WriteFile(Path+".log", []byte{}, 0666)
 }
 
