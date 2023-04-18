@@ -53,7 +53,10 @@ func Http_build_query(para map[string]string) string {
 }
 
 func UnHttp_build_query(Str string) map[string]string { // 反Http_build_query
-	Arr := strings.Split(Str, "&")
+	Arr := []string{}
+	if Str != "" {
+		Arr = strings.Split(Str, "&")
+	}
 	Result := map[string]string{}
 	for _, v := range Arr {
 		Tmp := strings.Split(v, "=")
