@@ -177,3 +177,19 @@ func Keys(Arr map[string]string) []string {
 	}
 	return Keys
 }
+
+func IntsToStrs(intArr []int) []string {
+	strArr := make([]string, len(intArr))
+	for i, val := range intArr {
+		strArr[i] = strconv.Itoa(val)
+	}
+	return strArr
+}
+
+func StrsToInts(StrArr []string) []int {
+	intArr := make([]int, len(StrArr))
+	for i, val := range StrArr {
+		intArr[i], _ = strconv.Atoi(val)
+	}
+	return intArr
+}
