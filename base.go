@@ -20,6 +20,10 @@ func Log(Path string) {
 
 func LogSave(Path string) { // 保存日志
 	Yestoday := DateTimeGet() - 86400
+	SavePath := Path + "_" + Date(Yestoday, "20060102") + ".log"
+	if _, Err := os.Stat(SavePath); Err == nil { //文件存在则不处理
+		return
+	}
 	copy(Path+".log", Path+"_"+Date(Yestoday, "20060102")+".log")
 	os.WriteFile(Path+".log", []byte{}, 0666)
 }
