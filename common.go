@@ -14,6 +14,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -257,4 +258,11 @@ func BytesToInt(b []byte) int32 {
 	b_buf := bytes.NewBuffer(b)
 	binary.Read(b_buf, binary.LittleEndian, &x)
 	return x
+}
+
+func FileExist(filename string) bool {
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		return false
+	}
+	return true
 }
