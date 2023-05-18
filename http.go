@@ -41,6 +41,20 @@ func Post(url string, paraInterface interface{}) (string, error) {
 	return string(robots), err
 }
 
+func PostJson(url string, paraInterface interface{}) (string, error) {
+	Json, _ := JsonEncode(paraInterface)
+	res, err := http.Post(url, "application/json", strings.NewReader(string(Json)))
+	if err != nil {
+		return "", err
+	}
+	robots, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		return "", err
+	}
+	return string(robots), err
+}
+
 /*
 *  para := map[string]string{"sex":"boy", "age":"18", "name":"老钱"}
  */
