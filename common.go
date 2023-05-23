@@ -266,3 +266,23 @@ func FileExist(filename string) bool {
 	}
 	return true
 }
+
+func Max(Para ...int) int {
+	Tmp := 0
+	for _, v := range Para {
+		if Tmp == 0 || v > Tmp {
+			Tmp = v
+		}
+	}
+	return Tmp
+}
+
+func Min(Para ...int) int {
+	Tmp := 0
+	for _, v := range Para {
+		if Tmp == 0 || v < Tmp {
+			Tmp = v
+		}
+	}
+	return Tmp
+}
