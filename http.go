@@ -82,3 +82,8 @@ func UnHttp_build_query(Str string) map[string]string { // 反Http_build_query
 func UrlEnCode(str string) string {
 	return url.QueryEscape(str)
 }
+
+func UrlDeCode(str string) string {
+	Str, _ := url.QueryUnescape(str)
+	return Str
+}
