@@ -66,8 +66,8 @@ func (cr *CacheRedis) SetNx(key string, value string) (int, error) {
 	return redis.Int(cr.do("SETNX", key, value))
 }
 
-func (cr *CacheRedis) SetEx(key string, expire string, value string) (int, error) {
-	return redis.Int(cr.do("SETEX", key, expire, value))
+func (cr *CacheRedis) SetEx(key string, expire int, value string) (string, error) {
+	return redis.String(cr.do("SETEX", key, expire, value))
 }
 
 func (cr *CacheRedis) Del(key ...string) error {
