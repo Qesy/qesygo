@@ -91,7 +91,5 @@ func GetDiffDaysBySecond(t1, t2 int64) int {
 func GetDiffDaysBySecondOffset(t1, t2, offset int64) int {
 	t1 = t1 - offset
 	t2 = t2 - offset
-	time1 := time.Unix(t1, 0)
-	time2 := time.Unix(t2, 0)
-	return GetDiffDays(time1, time2)
+	return GetDiffDaysBySecond(t1, t2)
 }
