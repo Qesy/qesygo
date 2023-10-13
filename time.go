@@ -85,3 +85,11 @@ func GetDiffDaysBySecond(t1, t2 int64) int {
 	time2 := time.Unix(t2, 0)
 	return GetDiffDays(time1, time2)
 }
+
+// 获取t1和t2的相差天数，单位：秒，0表同一天，正数表t1>t2，负数表t1<t2(带偏移)
+// 使用场景：比如以每天5点为天数计算分界点（同一天4点和6点，算2天）
+func GetDiffDaysBySecondOffset(t1, t2, offset int64) int {
+	t1 = t1 - offset
+	t2 = t2 - offset
+	return GetDiffDaysBySecond(t1, t2)
+}
