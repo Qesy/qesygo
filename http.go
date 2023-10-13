@@ -1,9 +1,10 @@
 package qesygo
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -13,7 +14,10 @@ func Get(url string, para map[string]string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	robots, err := ioutil.ReadAll(res.Body)
+	if res.StatusCode != 200 {
+		return "", Err("StatusCode : " + strconv.Itoa(res.StatusCode))
+	}
+	robots, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
 		return "", err
@@ -33,7 +37,10 @@ func Post(url string, paraInterface interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	robots, err := ioutil.ReadAll(res.Body)
+	if res.StatusCode != 200 {
+		return "", Err("StatusCode : " + strconv.Itoa(res.StatusCode))
+	}
+	robots, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
 		return "", err
@@ -47,7 +54,7 @@ func PostJson(url string, paraInterface interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	robots, err := ioutil.ReadAll(res.Body)
+	robots, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
 		return "", err
