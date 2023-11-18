@@ -38,9 +38,7 @@ func (a ByAge) Less(i, j int) bool { return a[i].Age < a[j].Age }
 func Array_merge(arr ...[]string) []string {
 	var retArr []string
 	for _, n := range arr {
-		for _, v := range n {
-			retArr = append(retArr, v)
-		}
+		retArr = append(retArr, n...)
 	}
 	return retArr
 }
@@ -48,9 +46,7 @@ func Array_merge(arr ...[]string) []string {
 func Array_merge_int(arr ...[]int) []int {
 	var retArr []int
 	for _, n := range arr {
-		for _, v := range n {
-			retArr = append(retArr, v)
-		}
+		retArr = append(retArr, n...)
 	}
 	return retArr
 }
