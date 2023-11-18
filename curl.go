@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -77,7 +77,7 @@ func (c *CurlModel) ExecGet() ([]byte, error) { //设置参数
 		return []byte{}, err
 	}
 	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 func (c *CurlModel) ExecPost() ([]byte, error) { //设置参数
@@ -120,7 +120,7 @@ func (c *CurlModel) ExecPost() ([]byte, error) { //设置参数
 		return []byte{}, err
 	}
 	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 
 	// resp, err := http.Post(c.Url, "application/json", bytes.NewReader(Json))
 	// if err != nil {
