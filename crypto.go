@@ -48,6 +48,20 @@ func RsaEncrypt(origData []byte, Privatekey []byte) ([]byte, error) {
 	return rsa.SignPKCS1v15(rand.Reader, private, crypto.SHA1, hashed)
 }
 
+// 解密
+func RsaDecrypt(ciphertext []byte) ([]byte, error) {
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("private key error!")
+	}
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+}
+
+// 验证
 func RsaVeri(origData []byte, PublicKey []byte, Sign string) error {
 	block, _ := pem.Decode(PublicKey)
 	if block == nil {
