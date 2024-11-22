@@ -49,16 +49,16 @@ func RsaEncrypt(origData []byte, Privatekey []byte) ([]byte, error) {
 }
 
 // 解密
-func RsaDecrypt(ciphertext []byte) ([]byte, error) {
-	block, _ := pem.Decode(privateKey)
+func RsaDecrypt(ciphertext []byte, Privatekey []byte) ([]byte, error) {
+	block, _ := pem.Decode(Privatekey)
 	if block == nil {
-		return nil, errors.New("private key error!")
+		return nil, Err("private key error!")
 	}
-	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	private, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
 		return nil, err
 	}
-	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+	return rsa.DecryptPKCS1v15(rand.Reader, private, ciphertext)
 }
 
 // 验证
