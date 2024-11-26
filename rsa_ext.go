@@ -215,7 +215,7 @@ func priKeyEncrypt(rand io.Reader, priv *rsa.PrivateKey, hashed []byte) ([]byte,
 	for i := 2; i < k-tLen-1; i++ {
 		em[i] = 0xff
 	}
-	copy(string(em[k-tLen:k]), string(hashed))
+	copy(em[k-tLen:k], hashed)
 	m := new(big.Int).SetBytes(em)
 	c, err := decrypt(rand, priv, m)
 	if err != nil {
@@ -308,7 +308,7 @@ func copyWithLeftPad(dest, src []byte) {
 	for i := 0; i < numPaddingBytes; i++ {
 		dest[i] = 0
 	}
-	copy(string(dest[numPaddingBytes:]), string(src))
+	copy(dest[numPaddingBytes:], src)
 }
 
 // 从crypto/rsa复制
@@ -336,7 +336,7 @@ func leftPad(input []byte, size int) (out []byte) {
 		n = size
 	}
 	out = make([]byte, size)
-	copy(string(out[len(out)-n:]), string(input))
+	copy(out[len(out)-n:], input)
 	return
 }
 

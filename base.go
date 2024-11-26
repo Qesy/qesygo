@@ -24,11 +24,11 @@ func LogSave(Path string) { // 保存日志
 	if _, Err := os.Stat(SavePath); Err == nil { //文件存在则不处理
 		return
 	}
-	copy(Path+".log", Path+"_"+Date(Yestoday, "20060102")+".log")
+	txtCopy(Path+".log", Path+"_"+Date(Yestoday, "20060102")+".log")
 	os.WriteFile(Path+".log", []byte{}, 0666)
 }
 
-func copy(src, dst string) (int64, error) {
+func txtCopy(src, dst string) (int64, error) {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
 		return 0, err
