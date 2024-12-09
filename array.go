@@ -140,6 +140,21 @@ func Array_Mixed(Arr1 []int, Arr2 []int) []int {
 	return TempArr
 }
 
+func Array_Mixed_String(Arr1 []string, Arr2 []string) []string {
+	BigArr, SmallArr := Arr1, Arr2
+	if len(Arr2) > len(Arr1) {
+		BigArr = Arr2
+		SmallArr = Arr1
+	}
+	TempArr := []string{}
+	for _, v := range BigArr {
+		if InArray(SmallArr, v) {
+			TempArr = append(TempArr, v)
+		}
+	}
+	return TempArr
+}
+
 func Array_column(Arr []map[string]string, Str string) []string {
 	NewArr := []string{}
 	for _, v := range Arr {
