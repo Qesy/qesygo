@@ -71,8 +71,41 @@ func (c *CurlModel) SetCert(certFile string, keyFile string) *CurlModel { //设�
 
 func (c *CurlModel) ExecGet() ([]byte, error) { //设置参数
 	GetStr := Http_build_query(c.Para)
-	resp, err := http.Get(c.Url + "?" + GetStr)
-	fmt.Println("Url", c.Url+"?"+GetStr)
+	Url := c.Url
+	if len(c.Para) > 0 {
+		Url = c.Url + "?" + GetStr
+	}
+	req, err := http.NewRequest("GET", Url, nil)
+	if err != nil {
+		return []byte{}, err
+	}
+	if c.IsJson {
+		req.Header.Set("Accept", "application/json")
+		req.Header.Set("Content-Type", "application/json")
+	} else {
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+	for k, v := range c.Header {
+		req.Header.Set(k, v)
+	}
+	clinet := &http.Client{}
+	if c.IsCert {
+		var cliCrt tls.Certificate
+		cliCrt, err = tls.LoadX509KeyPair(c.CertFile, c.KeyFile)
+		if err != nil {
+			return []byte{}, err
+		}
+		clinet = &http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{Certificates: []tls.Certificate{cliCrt}},
+			},
+		}
+	}
+	if c.IsDebug {
+		fmt.Printf("DEBUG : %v", c.Para)
+	}
+
+	resp, err := clinet.Do(req)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -81,7 +114,7 @@ func (c *CurlModel) ExecGet() ([]byte, error) { //设置参数
 }
 
 func (c *CurlModel) ExecPost() ([]byte, error) { //设置参数
-	b := []byte{}
+	var b []byte
 	if c.IsJson {
 		b, _ = JsonEncode(c.Para)
 	} else {
@@ -92,11 +125,17 @@ func (c *CurlModel) ExecPost() ([]byte, error) { //设置参数
 		b = c.Body
 	}
 	req, err := http.NewRequest("POST", c.Url, bytes.NewReader(b))
+	if err != nil {
+		return []byte{}, err
+	}
 	if c.IsJson {
 		req.Header.Set("Accept", "application/json")
 		req.Header.Set("Content-Type", "application/json")
 	} else {
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+	for k, v := range c.Header {
+		req.Header.Set(k, v)
 	}
 	clinet := &http.Client{}
 	if c.IsCert {

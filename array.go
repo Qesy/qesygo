@@ -183,7 +183,7 @@ func Array_unique(Arr []string) []string {
 
 func Keys(Arr map[string]string) []string {
 	Keys := []string{}
-	for k, _ := range Arr {
+	for k := range Arr {
 		Keys = append(Keys, k)
 	}
 	return Keys

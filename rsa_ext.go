@@ -55,7 +55,7 @@ func getPriKey(privatekey []byte) (*rsa.PrivateKey, error) {
 }
 
 // 公钥加密或解密byte
-func pubKeyByte(pub *rsa.PublicKey, in []byte, isEncrytp bool) ([]byte, error) {
+func PubKeyByte(pub *rsa.PublicKey, in []byte, isEncrytp bool) ([]byte, error) {
 	k := (pub.N.BitLen() + 7) / 8
 	if isEncrytp {
 		k = k - 11
@@ -77,7 +77,7 @@ func pubKeyByte(pub *rsa.PublicKey, in []byte, isEncrytp bool) ([]byte, error) {
 }
 
 // 私钥加密或解密byte
-func priKeyByte(pri *rsa.PrivateKey, in []byte, isEncrytp bool) ([]byte, error) {
+func PriKeyByte(pri *rsa.PrivateKey, in []byte, isEncrytp bool) ([]byte, error) {
 	k := (pri.N.BitLen() + 7) / 8
 	if isEncrytp {
 		k = k - 11
@@ -132,7 +132,6 @@ func pubKeyIO(pub *rsa.PublicKey, in io.Reader, out io.Writer, isEncrytp bool) (
 			return err
 		}
 	}
-	return nil
 }
 
 // 私钥加密或解密Reader
@@ -169,7 +168,6 @@ func priKeyIO(pri *rsa.PrivateKey, r io.Reader, w io.Writer, isEncrytp bool) (er
 			return err
 		}
 	}
-	return nil
 }
 
 // 公钥解密
@@ -230,7 +228,7 @@ var bigZero = big.NewInt(0)
 var bigOne = big.NewInt(1)
 
 // 从crypto/rsa复制
-func encrypt(c *big.Int, pub *rsa.PublicKey, m *big.Int) *big.Int {
+func Encrypt(c *big.Int, pub *rsa.PublicKey, m *big.Int) *big.Int {
 	e := big.NewInt(int64(pub.E))
 	c.Exp(m, e, pub.N)
 	return c
@@ -312,7 +310,7 @@ func copyWithLeftPad(dest, src []byte) {
 }
 
 // 从crypto/rsa复制
-func nonZeroRandomBytes(s []byte, rand io.Reader) (err error) {
+func NonZeroRandomBytes(s []byte, rand io.Reader) (err error) {
 	_, err = io.ReadFull(rand, s)
 	if err != nil {
 		return
