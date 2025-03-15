@@ -70,9 +70,9 @@ func (c *CurlModel) SetCert(certFile string, keyFile string) *CurlModel { //设�
 }
 
 func (c *CurlModel) ExecGet() ([]byte, error) { //设置参数
-	GetStr := Http_build_query(c.Para)
 	Url := c.Url
 	if len(c.Para) > 0 {
+		GetStr := Http_build_query(c.Para)
 		Url = c.Url + "?" + GetStr
 	}
 	req, err := http.NewRequest("GET", Url, nil)
