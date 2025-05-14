@@ -3,7 +3,6 @@ package qesygo
 import (
 	"math/rand"
 	"strconv"
-	"time"
 )
 
 /*
@@ -35,7 +34,7 @@ func (a ByAge) Len() int           { return len(a) }
 func (a ByAge) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByAge) Less(i, j int) bool { return a[i].Age < a[j].Age }
 
-func Array_merge(arr ...[]string) []string {
+func Array_merge(arr ...[]string) []string { // 合并字符串数组
 	var retArr []string
 	for _, n := range arr {
 		retArr = append(retArr, n...)
@@ -43,7 +42,7 @@ func Array_merge(arr ...[]string) []string {
 	return retArr
 }
 
-func Array_merge_int(arr ...[]int) []int {
+func Array_merge_int(arr ...[]int) []int { // 合并int数组
 	var retArr []int
 	for _, n := range arr {
 		retArr = append(retArr, n...)
@@ -51,7 +50,7 @@ func Array_merge_int(arr ...[]int) []int {
 	return retArr
 }
 
-func InArray(Arr interface{}, str string) bool {
+func InArray(Arr interface{}, str string) bool { // 数组内是否包含
 	if strArr, ok := Arr.([]string); ok {
 		for _, v := range strArr {
 			if v == str {
@@ -91,11 +90,10 @@ func InArray(Arr interface{}, str string) bool {
 }
 
 func Array_Rand(num int) []int {
-	rand.Seed(time.Now().UnixNano())
 	return rand.Perm(num)
 }
 
-func Array_Diff(Arr1 []int, Arr2 []int) []int {
+func Array_Diff(Arr1 []int, Arr2 []int) []int { // 获取不在B数组内的A的值
 	BigArr, SmallArr := Arr1, Arr2
 	if len(Arr2) > len(Arr1) {
 		BigArr = Arr2
@@ -110,7 +108,7 @@ func Array_Diff(Arr1 []int, Arr2 []int) []int {
 	return TempArr
 }
 
-func Array_Diff_String(Arr1 []string, Arr2 []string) []string {
+func Array_Diff_String(Arr1 []string, Arr2 []string) []string { // 获取不在B数组内的A的值
 	BigArr, SmallArr := Arr1, Arr2
 	if len(Arr2) > len(Arr1) {
 		BigArr = Arr2
@@ -125,7 +123,7 @@ func Array_Diff_String(Arr1 []string, Arr2 []string) []string {
 	return TempArr
 }
 
-func Array_Mixed(Arr1 []int, Arr2 []int) []int {
+func Array_Mixed(Arr1 []int, Arr2 []int) []int { // 获取在B数组内A数组的值
 	BigArr, SmallArr := Arr1, Arr2
 	if len(Arr2) > len(Arr1) {
 		BigArr = Arr2
@@ -140,7 +138,7 @@ func Array_Mixed(Arr1 []int, Arr2 []int) []int {
 	return TempArr
 }
 
-func Array_Mixed_String(Arr1 []string, Arr2 []string) []string {
+func Array_Mixed_String(Arr1 []string, Arr2 []string) []string { // 获取在B数组内A数组的值
 	BigArr, SmallArr := Arr1, Arr2
 	if len(Arr2) > len(Arr1) {
 		BigArr = Arr2
@@ -155,7 +153,7 @@ func Array_Mixed_String(Arr1 []string, Arr2 []string) []string {
 	return TempArr
 }
 
-func Array_column(Arr []map[string]string, Str string) []string {
+func Array_column(Arr []map[string]string, Str string) []string { // 获取[]map[string]string{}中指定key的值
 	NewArr := []string{}
 	for _, v := range Arr {
 		NewArr = append(NewArr, v[Str])
@@ -163,7 +161,7 @@ func Array_column(Arr []map[string]string, Str string) []string {
 	return NewArr
 }
 
-func Array_column_index(Arr []map[string]string, Str string, Index string) map[string]string {
+func Array_column_index(Arr []map[string]string, Str string, Index string) map[string]string { // 获取[]map[string]string{}中指定key的值带索引
 	NewArr := map[string]string{}
 	for _, v := range Arr {
 		NewArr[v[Index]] = v[Str]
@@ -171,7 +169,7 @@ func Array_column_index(Arr []map[string]string, Str string, Index string) map[s
 	return NewArr
 }
 
-func Array_unique(Arr []string) []string {
+func Array_unique(Arr []string) []string { // 过滤数组中重复的值
 	NewArr := []string{}
 	for _, v := range Arr {
 		if !InArray(NewArr, v) {
@@ -181,7 +179,7 @@ func Array_unique(Arr []string) []string {
 	return NewArr
 }
 
-func Keys(Arr map[string]string) []string {
+func Keys(Arr map[string]string) []string { // 获取数组中的Key
 	Keys := []string{}
 	for k := range Arr {
 		Keys = append(Keys, k)
@@ -189,7 +187,7 @@ func Keys(Arr map[string]string) []string {
 	return Keys
 }
 
-func IntsToStrs(intArr []int) []string {
+func IntsToStrs(intArr []int) []string { // 把数值数组转为字符串数组
 	strArr := make([]string, len(intArr))
 	for i, val := range intArr {
 		strArr[i] = strconv.Itoa(val)
@@ -197,7 +195,7 @@ func IntsToStrs(intArr []int) []string {
 	return strArr
 }
 
-func StrsToInts(StrArr []string) []int {
+func StrsToInts(StrArr []string) []int { // 把字符串数组转为数值数组
 	intArr := make([]int, len(StrArr))
 	for i, val := range StrArr {
 		intArr[i], _ = strconv.Atoi(val)

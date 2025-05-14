@@ -99,8 +99,8 @@ func (cr *CacheRedis) HMset(key string, arr interface{}) (interface{}, error) {
 	return cr.do("HMSET", redis.Args{}.Add(key).AddFlat(arr)...)
 }
 
-func (cr *CacheRedis) HGet(key string, subKey string) (interface{}, error) {
-	return cr.do("HGET", key, subKey)
+func (cr *CacheRedis) HGet(key string, subKey string) (string, error) {
+	return redis.String(cr.do("HGET", key, subKey))
 }
 
 func (cr *CacheRedis) HGetAll(key string) (map[string]string, error) {
@@ -119,28 +119,28 @@ func (cr *CacheRedis) SAdd(Key string, Val string) (int, error) {
 	return redis.Int(cr.do("SADD", Key, Val))
 }
 
-func (cr *CacheRedis) SCard(Key string) (interface{}, error) { // 返回集合 key 的基数(集合中元素的数量)。
+func (cr *CacheRedis) SCard(Key string) (int, error) { // 返回集合 key 的基数(集合中元素的数量)。
 	return redis.Int(cr.do("SCARD", Key))
 }
 
-func (cr *CacheRedis) SMembers(Key string, Val string) (interface{}, error) { //返回集合 key 中的所有成员
-	return redis.Strings(cr.do("SMEMBERS", Key, Val))
+func (cr *CacheRedis) SMembers(Key string) ([]string, error) { //返回集合 key 中的所有成员
+	return redis.Strings(cr.do("SMEMBERS", Key))
 }
 
 func (cr *CacheRedis) SIsMembers(Key string, Val string) (int, error) { //是否集合 key 的成员
 	return redis.Int(cr.do("SISMEMBER", Key, Val))
 }
 
-func (cr *CacheRedis) SRem(Key string, Val ...string) (interface{}, error) { //移除集合 key 中的一个或多个 member 元素
+func (cr *CacheRedis) SRem(Key string, Val ...string) (int, error) { //移除集合 key 中的一个或多个 member 元素
 	return redis.Int(cr.do("SREM", Key, Val))
 }
 
-func (cr *CacheRedis) ZAdd(Key string, Score int64, Name string) (interface{}, error) {
-	return cr.do("ZADD", Key, Score, Name)
+func (cr *CacheRedis) ZAdd(Key string, Score int64, Name string) (int, error) {
+	return redis.Int(cr.do("ZADD", Key, Score, Name))
 }
 
-func (cr *CacheRedis) ZRem(Key string, Name string) (interface{}, error) {
-	return cr.do("zRem", Key, Name)
+func (cr *CacheRedis) ZRem(Key string, Name string) (int, error) {
+	return redis.Int(cr.do("zRem", Key, Name))
 }
 
 func (cr *CacheRedis) ZCard(Key string) (int, error) {
