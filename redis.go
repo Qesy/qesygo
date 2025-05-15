@@ -1,9 +1,10 @@
 package qesygo
 
 import (
+	"strings"
 	"time"
 
-	"github.com/garyburd/redigo/redis"
+	"github.com/gomodule/redigo/redis"
 )
 
 type CacheRedis struct {
@@ -132,7 +133,7 @@ func (cr *CacheRedis) SIsMembers(Key string, Val string) (int, error) { //是否
 }
 
 func (cr *CacheRedis) SRem(Key string, Val ...string) (int, error) { //移除集合 key 中的一个或多个 member 元素
-	return redis.Int(cr.do("SREM", Key, Val))
+	return redis.Int(cr.do("SREM", Key, strings.Join(Val, " ")))
 }
 
 func (cr *CacheRedis) ZAdd(Key string, Score int64, Name string) (int, error) {

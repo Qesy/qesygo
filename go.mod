@@ -10,4 +10,7 @@ require (
 	golang.org/x/text v0.13.0
 )
 
-require google.golang.org/protobuf v1.26.0 // indirect
+require (
+	github.com/gomodule/redigo v1.9.2 // indirect
+	google.golang.org/protobuf v1.26.0 // indirect
+)
