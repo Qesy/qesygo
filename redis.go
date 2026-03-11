@@ -54,8 +54,14 @@ func (cr *CacheRedis) FlushAll() error {
 }
 
 func (cr *CacheRedis) Get(key string) (string, error) {
-	str, err := redis.String(cr.do("GET", key))
-	return str, err
+	reply, err := cr.do("GET", key)
+	if err != nil {
+		return "", err
+	}
+	if reply == nil {
+		return "", nil
+	}
+	return string(reply.([]byte)), err
 }
 
 func (cr *CacheRedis) Set(key string, value string) error {
