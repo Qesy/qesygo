@@ -142,6 +142,7 @@ func (cr *CacheRedis) SRem(Key string, Val ...string) (int, error) { //移除集
 	return redis.Int(cr.do("SREM", Key, strings.Join(Val, " ")))
 }
 
+// ZSET
 func (cr *CacheRedis) ZAdd(Key string, Score int64, Name string) (int, error) {
 	return redis.Int(cr.do("ZADD", Key, Score, Name))
 }
@@ -196,4 +197,75 @@ func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) ([][2]int64,
 
 func (cr *CacheRedis) ZCount(Key string, Min int32, Max int32) (int, error) {
 	return redis.Int(cr.do("ZCOUNT", Key, Min, Max))
+}
+
+// List
+func (cr *CacheRedis) BLPop(keys ...string) (string, error) {
+	return redis.String(cr.do("BLPOP", keys))
+}
+
+func (cr *CacheRedis) BRPop(keys ...string) (string, error) {
+	return redis.String(cr.do("BRPOP", keys))
+}
+
+func (cr *CacheRedis) BRPopLPush(source string, destination string, timeout int) (string, error) {
+	return redis.String(cr.do("BRPOPLPUSH", source, destination, timeout))
+}
+
+func (cr *CacheRedis) LIndex(key string, index int64) (string, error) {
+	return redis.String(cr.do("LINDEX", key, index))
+}
+
+func (cr *CacheRedis) LInsert(key string, op string, pivot string, value string) (int, error) {
+	return redis.Int(cr.do("LINSERT", key, op, pivot, value))
+}
+
+func (cr *CacheRedis) LLen(key string) (int64, error) {
+	return redis.Int64(cr.do("LLEN", key))
+}
+
+func (cr *CacheRedis) LPop(key string) (string, error) {
+	return redis.String(cr.do("LPOP", key))
+}
+
+func (cr *CacheRedis) LPush(key string, value string) (int, error) {
+	return redis.Int(cr.do("LPUSH", key, value))
+}
+
+func (cr *CacheRedis) LPushX(key string, value string) (int, error) {
+	return redis.Int(cr.do("LPUSHX", key, value))
+}
+
+func (cr *CacheRedis) LRange(key string, start int64, stop int64) ([]string, error) {
+	return redis.Strings(cr.do("LRANGE", key, start, stop))
+}
+
+func (cr *CacheRedis) LRem(key string, count int64, value string) (int, error) {
+	return redis.Int(cr.do("LREM", key, count, value))
+}
+
+func (cr *CacheRedis) LSet(key string, index int64, value string) error {
+	_, err := cr.do("LSET", key, index, value)
+	return err
+}
+
+func (cr *CacheRedis) LTRIM(key string, start int64, stop int64) error {
+	_, err := cr.do("LTRIM", key, start, stop)
+	return err
+}
+
+func (cr *CacheRedis) RPop(key string) (string, error) {
+	return redis.String(cr.do("RPOP", key))
+}
+
+func (cr *CacheRedis) RPopLPush(source string, destination string) (string, error) {
+	return redis.String(cr.do("RPOPLPUSH", source, destination))
+}
+
+func (cr *CacheRedis) RPush(key string, value string) (int, error) {
+	return redis.Int(cr.do("RPUSH", key, value))
+}
+
+func (cr *CacheRedis) RPushX(key string, value string) (int, error) {
+	return redis.Int(cr.do("RPUSHX", key, value))
 }
