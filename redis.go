@@ -1,7 +1,6 @@
 package qesygo
 
 import (
-	"strings"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
@@ -16,6 +15,7 @@ type CacheRedis struct {
 func (cr *CacheRedis) newPool() {
 	cr.Pool = &redis.Pool{
 		MaxIdle:     30,
+		MaxActive:   100, // 🔥 建议加上
 		IdleTimeout: 240 * time.Second,
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial("tcp", cr.Conninfo)
@@ -139,7 +139,11 @@ func (cr *CacheRedis) SIsMembers(Key string, Val string) (int, error) { //是否
 }
 
 func (cr *CacheRedis) SRem(Key string, Val ...string) (int, error) { //移除集合 key 中的一个或多个 member 元素
-	return redis.Int(cr.do("SREM", Key, strings.Join(Val, " ")))
+	args := redis.Args{}.Add(Key)
+	for _, v := range Val {
+		args = args.Add(v)
+	}
+	return redis.Int(cr.do("SREM", args...))
 }
 
 // ZSET
@@ -268,4 +272,44 @@ func (cr *CacheRedis) RPush(key string, value string) (int, error) {
 
 func (cr *CacheRedis) RPushX(key string, value string) (int, error) {
 	return redis.Int(cr.do("RPUSHX", key, value))
+}
+
+// ================= 队列封装（🔥核心） =================
+
+// 入队
+func (cr *CacheRedis) QueuePush(queue string, data string) error {
+	_, err := cr.LPush(queue, data)
+	return err
+}
+
+// 安全消费
+func (cr *CacheRedis) QueuePop(queue, processing string) (string, error) {
+	return cr.BRPopLPush(queue, processing, 0)
+}
+
+// ACK
+func (cr *CacheRedis) QueueAck(processing, data string) error {
+	_, err := cr.LRem(processing, 1, data)
+	return err
+}
+
+// 重试
+func (cr *CacheRedis) QueueRetry(queue, processing, data string) error {
+	_, _ = cr.LRem(processing, 1, data)
+	_, err := cr.LPush(queue, data)
+	return err
+}
+
+// 恢复（启动时）
+func (cr *CacheRedis) QueueRecover(queue, processing string) error {
+	tasks, err := cr.LRange(processing, 0, -1)
+	if err != nil {
+		return err
+	}
+
+	for _, task := range tasks {
+		cr.LPush(queue, task)
+	}
+
+	return cr.Del(processing)
 }
