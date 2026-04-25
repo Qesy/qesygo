@@ -295,12 +295,16 @@ func (cr *CacheRedis) QueueAck(processing, data string) error {
 
 // 重试
 func (cr *CacheRedis) QueueRetry(queue, processing, data string) error {
-	_, _ = cr.LRem(processing, 1, data)
-	_, err := cr.LPush(queue, data)
-	return err
+	if _, err := cr.LRem(processing, 1, data); err != nil {
+		return err
+	}
+	if _, err := cr.LPush(queue, data); err != nil {
+		return err
+	}
+	return nil
 }
 
-// 恢复（启动时）
+// 恢复（启动时）这个最好别用，分布式下坑死你
 func (cr *CacheRedis) QueueRecover(queue, processing string) error {
 	tasks, err := cr.LRange(processing, 0, -1)
 	if err != nil {
