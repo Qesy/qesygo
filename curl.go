@@ -83,7 +83,7 @@ func (c *CurlModel) ExecGet() ([]byte, error) { //设置参数
 		req.Header.Set("Accept", "application/json")
 		req.Header.Set("Content-Type", "application/json")
 	} else {
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		//req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	}
 	for k, v := range c.Header {
 		req.Header.Set(k, v)
