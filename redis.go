@@ -199,6 +199,38 @@ func (cr *CacheRedis) ZRevRange(Key string, Start int32, End int32) ([][2]int64,
 	}
 }
 
+func (cr *CacheRedis) ZRangeByScore(Key string, Start int32, End int32) ([][2]int64, error) {
+	rank := [][2]int64{}
+	if rsByte, err := cr.do("ZRANGEBYSCORE", Key, Start, End, "WITHSCORES"); err == nil {
+		rsByteArr := rsByte.([]interface{})
+		for i := 0; i < len(rsByteArr)/2; i++ {
+			index := i * 2
+			key := StrToInt64(string(rsByteArr[index].([]byte)))
+			val := StrToInt64(string(rsByteArr[index+1].([]byte)))
+			rank = append(rank, [2]int64{key, val})
+		}
+		return rank, err
+	} else {
+		return rank, err
+	}
+}
+
+func (cr *CacheRedis) ZRevRangeByScore(Key string, Start int32, End int32) ([][2]int64, error) {
+	rank := [][2]int64{}
+	if rsByte, err := cr.do("ZREMRANGEBYSCORE", Key, Start, End, "WITHSCORES"); err == nil {
+		rsByteArr := rsByte.([]interface{})
+		for i := 0; i < len(rsByteArr)/2; i++ {
+			index := i * 2
+			key := StrToInt64(string(rsByteArr[index].([]byte)))
+			val := StrToInt64(string(rsByteArr[index+1].([]byte)))
+			rank = append(rank, [2]int64{key, val})
+		}
+		return rank, err
+	} else {
+		return rank, err
+	}
+}
+
 func (cr *CacheRedis) ZCount(Key string, Min int32, Max int32) (int, error) {
 	return redis.Int(cr.do("ZCOUNT", Key, Min, Max))
 }
