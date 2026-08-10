@@ -93,60 +93,60 @@ func Array_Rand(num int) []int {
 	return rand.Perm(num)
 }
 
-func Array_Diff(Arr1 []int, Arr2 []int) []int { // 获取不在B数组内的A的值
-	BigArr, SmallArr := Arr1, Arr2
-	if len(Arr2) > len(Arr1) {
-		BigArr = Arr2
-		SmallArr = Arr1
+func Array_Diff(Arr1 []int, Arr2 []int) []int { // 获取不在B数组内的A的值(Int)
+	lookup := make(map[int]struct{}, len(Arr2))
+	for _, v := range Arr2 {
+		lookup[v] = struct{}{}
 	}
-	TempArr := []int{}
-	for _, v := range BigArr {
-		if !InArray(SmallArr, strconv.Itoa(v)) {
+
+	TempArr := make([]int, 0, len(Arr1))
+	for _, v := range Arr1 {
+		if _, exists := lookup[v]; !exists {
 			TempArr = append(TempArr, v)
 		}
 	}
 	return TempArr
 }
 
-func Array_Diff_String(Arr1 []string, Arr2 []string) []string { // 获取不在B数组内的A的值
-	BigArr, SmallArr := Arr1, Arr2
-	if len(Arr2) > len(Arr1) {
-		BigArr = Arr2
-		SmallArr = Arr1
+func Array_Diff_String(Arr1 []string, Arr2 []string) []string { // 获取不在B数组内的A的值(String)
+	lookup := make(map[string]struct{}, len(Arr2))
+	for _, v := range Arr2 {
+		lookup[v] = struct{}{}
 	}
-	TempArr := []string{}
-	for _, v := range BigArr {
-		if !InArray(SmallArr, v) {
+
+	TempArr := make([]string, 0, len(Arr1))
+	for _, v := range Arr1 {
+		if _, exists := lookup[v]; !exists {
 			TempArr = append(TempArr, v)
 		}
 	}
 	return TempArr
 }
 
-func Array_Mixed(Arr1 []int, Arr2 []int) []int { // 获取在B数组内A数组的值
-	BigArr, SmallArr := Arr1, Arr2
-	if len(Arr2) > len(Arr1) {
-		BigArr = Arr2
-		SmallArr = Arr1
+func Array_Mixed(Arr1 []int, Arr2 []int) []int { // 获取在B数组内A数组的值(Int)
+	lookup := make(map[int]struct{}, len(Arr2))
+	for _, v := range Arr2 {
+		lookup[v] = struct{}{}
 	}
-	TempArr := []int{}
-	for _, v := range BigArr {
-		if InArray(SmallArr, strconv.Itoa(v)) {
+
+	TempArr := make([]int, 0, len(Arr1))
+	for _, v := range Arr1 {
+		if _, exists := lookup[v]; exists {
 			TempArr = append(TempArr, v)
 		}
 	}
 	return TempArr
 }
 
-func Array_Mixed_String(Arr1 []string, Arr2 []string) []string { // 获取在B数组内A数组的值
-	BigArr, SmallArr := Arr1, Arr2
-	if len(Arr2) > len(Arr1) {
-		BigArr = Arr2
-		SmallArr = Arr1
+func Array_Mixed_String(Arr1 []string, Arr2 []string) []string { // 获取在B数组内A数组的值(String)
+	lookup := make(map[string]struct{}, len(Arr2))
+	for _, v := range Arr2 {
+		lookup[v] = struct{}{}
 	}
-	TempArr := []string{}
-	for _, v := range BigArr {
-		if InArray(SmallArr, v) {
+
+	TempArr := make([]string, 0, len(Arr1))
+	for _, v := range Arr1 {
+		if _, exists := lookup[v]; exists {
 			TempArr = append(TempArr, v)
 		}
 	}
