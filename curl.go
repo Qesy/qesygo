@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 type CurlModel struct {
@@ -20,6 +21,10 @@ type CurlModel struct {
 	IsCert   bool //是否验证证书
 	CertFile string
 	KeyFile  string
+}
+
+var client = &http.Client{
+	Timeout: 15 * time.Second,
 }
 
 func (c *CurlModel) SetUrl(Url string) *CurlModel { //设置网址
@@ -88,14 +93,14 @@ func (c *CurlModel) ExecGet() ([]byte, error) { //设置参数
 	for k, v := range c.Header {
 		req.Header.Set(k, v)
 	}
-	clinet := &http.Client{}
+	//clinet := &http.Client{}
 	if c.IsCert {
 		var cliCrt tls.Certificate
 		cliCrt, err = tls.LoadX509KeyPair(c.CertFile, c.KeyFile)
 		if err != nil {
 			return []byte{}, err
 		}
-		clinet = &http.Client{
+		client = &http.Client{
 			Transport: &http.Transport{
 				TLSClientConfig: &tls.Config{Certificates: []tls.Certificate{cliCrt}},
 			},
@@ -105,7 +110,7 @@ func (c *CurlModel) ExecGet() ([]byte, error) { //设置参数
 		fmt.Printf("DEBUG : %v", c.Para)
 	}
 
-	resp, err := clinet.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -137,14 +142,14 @@ func (c *CurlModel) ExecPost() ([]byte, error) { //设置参数
 	for k, v := range c.Header {
 		req.Header.Set(k, v)
 	}
-	clinet := &http.Client{}
+	//clinet := &http.Client{}
 	if c.IsCert {
 		var cliCrt tls.Certificate
 		cliCrt, err = tls.LoadX509KeyPair(c.CertFile, c.KeyFile)
 		if err != nil {
 			return []byte{}, err
 		}
-		clinet = &http.Client{
+		client = &http.Client{
 			Transport: &http.Transport{
 				TLSClientConfig: &tls.Config{Certificates: []tls.Certificate{cliCrt}},
 			},
@@ -154,7 +159,7 @@ func (c *CurlModel) ExecPost() ([]byte, error) { //设置参数
 		fmt.Println("DEBUG", string(b))
 	}
 
-	resp, err := clinet.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return []byte{}, err
 	}
