@@ -11,7 +11,7 @@ import (
 	"encoding/pem"
 	"log"
 
-	"github.com/forgoer/openssl"
+	"github.com/go-think/openssl"
 )
 
 // 16进制解码
