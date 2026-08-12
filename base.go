@@ -3,20 +3,8 @@ package qesygo
 import (
 	"fmt"
 	"io"
-	"log"
 	"os"
 )
-
-func Log(Path string) {
-	// Path : "./static/log/error"
-	logFile, err := os.OpenFile(Path+".log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		return
-	}
-	log.SetFlags(log.Llongfile | log.Ltime | log.Ldate)
-	log.SetOutput(logFile)
-	fmt.Println("Log Start Success !")
-}
 
 func LogSave(Path string) { // 保存日志
 	Yestoday := DateTimeGet() - 86400
